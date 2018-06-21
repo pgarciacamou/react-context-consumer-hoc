@@ -1,0 +1,25 @@
+{
+  "name": "react-context-consumer-hoc",
+  "version": "1.0.0",
+  "description": "consume multiple context and inject into a component as props",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pgarciacamou/react-context-consumer-hoc.git"
+  },
+  "keywords": [
+    "react",
+    "context",
+    "consumer",
+    "hoc"
+  ],
+  "author": "Pablo Garcia",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pgarciacamou/react-context-consumer-hoc/issues"
+  },
+  "homepage": "https://github.com/pgarciacamou/react-context-consumer-hoc#readme"
+}
