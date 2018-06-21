@@ -1,26 +1,37 @@
-/**
- * @class ExampleComponent
- */
-
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import _ from 'lodash'
 
-import styles from './styles.css'
+export default function ContextConsumerHOC(...ContextAPIs) {
+  return ComposedComponent => {
+    class ComponentEnhancedWithContextConsumerHOC extends Component {
+      consumerReducer = (ChildComponent, ContextAPI) => {
+        return NewComponent => {
+          const { context: parentContext = {}, ...props } = NewComponent
+          return (
+            <ContextAPI.Consumer>
+              {context => (
+                <ChildComponent
+                  {...props}
+                  context={_.extend({}, parentContext, context)}
+                />
+              )}
+            </ContextAPI.Consumer>
+          )
+        }
+      };
 
-export default class ExampleComponent extends Component {
-  static propTypes = {
-    text: PropTypes.string
-  }
+      render() {
+        // Recursively consume the APIs.
+        const ContextWrappedComponent = _.reduce(
+          ContextAPIs,
+          this.consumerReducer,
+          ComposedComponent
+        )
 
-  render() {
-    const {
-      text
-    } = this.props
+        return <ContextWrappedComponent {...this.props} />
+      }
+    }
 
-    return (
-      <div className={styles.test}>
-        Example Component: {text}
-      </div>
-    )
+    return ComponentEnhancedWithContextConsumerHOC
   }
 }
