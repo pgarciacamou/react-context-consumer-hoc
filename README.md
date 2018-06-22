@@ -13,6 +13,8 @@ npm install --save react-context-consumer-hoc
 ## Usage
 
 ```jsx
+import consume from "react-context-consumer-hoc"
+
 // Context A
 const ContextA = React.createContext()
 function ContextAProvider(props) {
@@ -64,7 +66,7 @@ class RandomConsumer extends Component {
   }
 }
 
-const WrappedConsumer = ContextConsumerHOC(ContextA, ContextB)(RandomConsumer)
+const WrappedConsumer = consume(ContextA, ContextB)(RandomConsumer)
 
 export default class App extends Component {
   render () {
