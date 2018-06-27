@@ -9,7 +9,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Changed
 
-## [v1.0.1](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/1.0.1) - 2017-04-04
+## [v1.0.2](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/1.0.2) - 2018-06-27
+### Added
+### Fixed
+- Performance issues due to computing consumers on every render
+- Issue #2: UI flashes
+### Changed
+
+## [v1.0.1](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/1.0.1) - 2018-06-27
 ### Added
 - Add CHANGELOG.md
 - Add DEVELOP.md
@@ -19,7 +26,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Clean code
 - Simplify usage example in README file
 
-## [v1.0.0](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/1.0.0) - 2017-06-21
+## [v1.0.0](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/1.0.0) - 2018-06-21
 ### Added
 - First release
 ### Fixed
