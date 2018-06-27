@@ -1,6 +1,6 @@
 {
   "name": "react-context-consumer-hoc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React context consumer hoc which injects as props",
   "author": "pgarciacamou",
   "license": "MIT",
