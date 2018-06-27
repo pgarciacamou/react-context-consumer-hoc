@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContextConsumerHOC matches snapshot 1`] = `
+Array [
+  <div
+    className="stuff"
+>
+    some other content
+</div>,
+  <div
+    className="nested element"
+>
+    <div
+        id="context-a"
+    >
+        1
+    </div>
+    <div
+        id="context-b"
+    >
+        2
+    </div>
+</div>,
+]
+`;

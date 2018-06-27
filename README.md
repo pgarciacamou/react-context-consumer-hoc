@@ -13,69 +13,35 @@ npm install --save react-context-consumer-hoc
 ## Usage
 
 ```jsx
-import consume from "react-context-consumer-hoc"
+import consume from 'react-context-consumer-hoc'
 
-// Context A
+function Component(props) {
+  const { context: { a, b } } = props;
+  return [
+    <div key='a' id='context-a'>
+      {a}
+    </div>,
+    <div key='b' id='context-b'>
+      {b}
+    </div>
+  ]
+}
+
 const ContextA = React.createContext()
-function ContextAProvider(props) {
-  return (
-    <ContextA.Provider value={{ someValue: Math.random() }}>
-      {props.children}
-    </ContextA.Provider>
-  )
-}
-
-// Context B
 const ContextB = React.createContext()
-function ContextBProvider(props) {
-  return (
-    <ContextB.Provider value={{ someOtherValue: Math.random() }}>
-      {props.children}
-    </ContextB.Provider>
-  )
-}
-
-// Consumer of Context A and B
-class RandomConsumer extends Component {
-  static propTypes = {
-    context: PropTypes.shape({
-      someValue: PropTypes.number.isRequired,
-      someOtherValue: PropTypes.number.isRequired
-    }).isRequired
-  }
-
-  constructor(props) {
-    super(props)
-
-    // do something in the state
-    this.state = {
-      color: props.context.someValue > 0.5 ? 'white' : 'black'
-    }
-  }
-
-  render() {
-    const { context } = this.props
-
-    return (
-      <p>
-        Black or white? {context.someValue > 0.5 ? 'white' : 'black'}
-        <br />
-        This is a random number: {context.someOtherValue}
-      </p>
-    )
-  }
-}
-
-const WrappedConsumer = consume(ContextA, ContextB)(RandomConsumer)
+const Consumer = consume(ContextA, ContextB)(Component)
 
 export default class App extends Component {
   render () {
     return (
-      <ContextAProvider>
-        <ContextBProvider>
-          <WrappedConsumer />
-        </ContextBProvider>
-      </ContextAProvider>
+      <ContextA.Provider value={{ a: 1 }}>
+        <ContextB.Provider value={{ b: 2 }}>
+          <div className='stuff'>some other content</div>
+          <div className='nested element'>
+            <Consumer />
+          </div>
+        </ContextB.Provider>
+      </ContextA.Provider>
     )
   }
 }
