@@ -20,15 +20,7 @@ function consumeContext(ChildConsumer, ContextAPI) {
 function ContextConsumerHOC(...ContextAPIs) {
   return ComposedComponent => {
     // Recursively consume the APIs only once.
-    const ContextWrappedComponent = _.reduce(
-      ContextAPIs,
-      consumeContext,
-      ComposedComponent
-    )
-
-    return function ComponentEnhancedWithContextConsumerHOC(props) {
-      return <ContextWrappedComponent {...props} />
-    }
+    return _.reduce(ContextAPIs, consumeContext, ComposedComponent)
   }
 }
 
