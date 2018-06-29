@@ -1,10 +1,17 @@
 {
   "name": "react-context-consumer-hoc",
   "version": "1.0.3",
-  "description": "React context consumer hoc which injects as props",
+  "description": "React context consumer HOC. Consumes context as props.",
   "author": "pgarciacamou",
   "license": "MIT",
   "repository": "pgarciacamou/react-context-consumer-hoc",
+  "keywords": [
+    "context",
+    "consumer",
+    "consume context",
+    "HOC",
+    "context as props"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
