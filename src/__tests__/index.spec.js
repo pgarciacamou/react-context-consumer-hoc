@@ -1,22 +1,37 @@
-import React from 'react'
-import consume from '../'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import renderer from 'react-test-renderer'
+import withContext from '../'
 
 function setup() {
-  function Component({ context: { a, b } }) {
-    return [
-      <div key='a' id='context-a'>
-        {a}
-      </div>,
-      <div key='b' id='context-b'>
-        {b}
-      </div>
-    ]
+  class SomeComponent extends Component {
+    static propTypes = {
+      context: PropTypes.shape({
+        a: PropTypes.number.isRequired,
+        b: PropTypes.number.isRequired
+      }).isRequired
+    }
+
+    render() {
+      const { context: { a, b } } = this.props
+      return [
+        <div key='a' id='context-a'>
+          {a}
+        </div>,
+        <div key='b' id='context-b'>
+          {b}
+        </div>
+      ]
+    }
   }
 
+  // The context will normally be exported elsewhere
   const ContextA = React.createContext()
   const ContextB = React.createContext()
-  const Consumer = consume(ContextA, ContextB)(Component)
+
+  // this would normally look like
+  //   export default withContext(ContextA, ContextB)(SomeComponent)
+  const Consumer = withContext(ContextA, ContextB)(SomeComponent)
 
   const tree = renderer.create(
     <ContextA.Provider value={{ a: 1 }}>

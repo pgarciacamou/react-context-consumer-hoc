@@ -1,5 +1,4 @@
 import React from 'react'
-import _ from 'lodash'
 
 function consumeContext(ChildConsumer, ContextAPI) {
   // eslint-disable-next-line
@@ -9,7 +8,10 @@ function consumeContext(ChildConsumer, ContextAPI) {
         {context => (
           <ChildConsumer
             {...props}
-            context={_.extend({}, parentContext, context)}
+            context={{
+              ...parentContext,
+              ...context
+            }}
           />
         )}
       </ContextAPI.Consumer>
@@ -20,7 +22,7 @@ function consumeContext(ChildConsumer, ContextAPI) {
 function ContextConsumerHOC(...ContextAPIs) {
   return ComposedComponent => {
     // Recursively consume the APIs only once.
-    return _.reduce(ContextAPIs, consumeContext, ComposedComponent)
+    return ContextAPIs.reduce(consumeContext, ComposedComponent)
   }
 }
 

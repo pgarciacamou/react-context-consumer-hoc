@@ -1,6 +1,6 @@
 # react-context-consumer-hoc
 
-> React context consumer hoc which injects as props
+> React context consumer hoc. A 2KB lib that consumes context as props.
 
 [![NPM](https://img.shields.io/npm/v/react-context-consumer-hoc.svg)](https://www.npmjs.com/package/react-context-consumer-hoc) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -13,23 +13,38 @@ npm install --save react-context-consumer-hoc
 ## Usage
 
 ```jsx
-import consume from 'react-context-consumer-hoc'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import withContext from 'react-context-consumer-hoc'
 
-function Component(props) {
-  const { context: { a, b } } = props;
-  return [
-    <div key='a' id='context-a'>
-      {a}
-    </div>,
-    <div key='b' id='context-b'>
-      {b}
-    </div>
-  ]
+class SomeComponent extends Component {
+  static propTypes = {
+    context: PropTypes.shape({
+      a: PropTypes.number.isRequired,
+      b: PropTypes.number.isRequired
+    }).isRequired
+  }
+
+  render() {
+    const { context: { a, b } } = this.props
+    return [
+      <div key='a' id='context-a'>
+        {a}
+      </div>,
+      <div key='b' id='context-b'>
+        {b}
+      </div>
+    ]
+  }
 }
 
+// The context will normally be exported elsewhere
 const ContextA = React.createContext()
 const ContextB = React.createContext()
-const Consumer = consume(ContextA, ContextB)(Component)
+
+// this would normally look like
+//   export default withContext(ContextA, ContextB)(SomeComponent)
+const Consumer = withContext(ContextA, ContextB)(SomeComponent)
 
 export default class App extends Component {
   render () {
@@ -49,11 +64,10 @@ export default class App extends Component {
 
 ## What is next?
 
-1. Instead of adding the context into "context", just inject consumed objects into props.
-  - e.g. instead of `this.props.context.somePropFromContext` => `this.props.somePropFromContext`
-2. [after implementing step #1] remove lodash dependency (not really needed).
-3. Namespacing: allow passing an options object the HOC so that we can name the consumed objects.
-  - e.g. ContextConsumerHOC({ someContext: ContextA })(SomeComponent) // this.props.someContext
+1. Instead of injecting into `props.context`, just inject as props.
+    - e.g. `this.props.context.somePropFromContext` => `this.props.somePropFromContext`
+2. Namespacing: allow passing an options object the HOC so that we can name the consumed objects.
+    - e.g. `ContextConsumerHOC({ someContext: ContextA })(SomeComponent) // this.props.someContext`
 
 ## License
 
