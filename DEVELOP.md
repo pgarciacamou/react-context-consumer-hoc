@@ -7,13 +7,14 @@
 
 ### Deployment (Publish && Release)
 
-1. Update `CHANGELOG.md`
-2. Create distribution files: `npm run build`
-3. Login to NPM: `npm login`
-4. Increase library version: `npm version [major|minor|patch]`
-5. Upload new tag created on step 5: `git push origin <new tag>`
-6. Create release in GitHub
-7. Publish: `npm publish`
+Deployment must be done using only `master` branch.
+
+1. Make sure `CHANGELOG.md` and `README.md` are updated properly
+2. `npm version [major|minor|patch]`
+3. `git push origin vM.m.p` (push newly created tag)
+4. `git push origin master` (`npm version ...` creates a new commit, make sure it is pushed to `master`)
+5. Create release in GitHub using the new tag `vM.m.p`
+6. Publish: `npm publish`
 
 ### Checklist for any PRs
 
