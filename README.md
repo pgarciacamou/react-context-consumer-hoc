@@ -12,6 +12,21 @@ npm install --save react-context-consumer-hoc
 
 ## Usage
 
+Just wrap your components on export.
+
+```jsx
+// MyComponent.js
+import withContext from 'react-context-consumer-hoc'
+import { ContextA } from "./MyContextAProvider"
+import { ContextB } from "./MyContextBProvider"
+
+function MyComponent({ context }) { /* ... */ }
+
+export default withContext(ContextA, ContextB)(MyComponent);
+```
+
+A full example:
+
 ```jsx
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
