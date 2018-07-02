@@ -17,8 +17,8 @@ Just wrap your components on export.
 ```jsx
 // MyComponent.js
 import withContext from 'react-context-consumer-hoc'
-import { ContextA } from "./MyContextAProvider"
-import { ContextB } from "./MyContextBProvider"
+import { ContextA } from './MyContextAProvider'
+import { ContextB } from './MyContextBProvider'
 
 function MyComponent({ context }) { /* ... */ }
 
