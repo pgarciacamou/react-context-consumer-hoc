@@ -1,6 +1,6 @@
 {
   "name": "react-context-consumer-hoc",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "React context consumer HOC. Consumes context as props.",
   "author": "pgarciacamou",
   "license": "MIT",
