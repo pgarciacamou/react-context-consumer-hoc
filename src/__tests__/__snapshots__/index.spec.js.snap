@@ -20,6 +20,11 @@ Array [
     >
         2
     </div>
+    <div
+        id="props-c"
+    >
+        3
+    </div>
 </div>,
 ]
 `;

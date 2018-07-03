@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Changed
 
+## [v1.0.4](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/v1.0.4) - 2018-07-03
+### Added
+### Fixed
+- Pass component reference to enhanced component
+### Changed
+
 ## [v1.0.3](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/v1.0.3) - 2018-06-27
 ### Added
 ### Fixed
