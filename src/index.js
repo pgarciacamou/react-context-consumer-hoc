@@ -1,22 +1,20 @@
 import React from 'react'
 
 function consumeContext(ChildConsumer, ContextAPI) {
-  // eslint-disable-next-line
-  return function Consumer({ context: parentContext = {}, ...props }) {
-    return (
-      <ContextAPI.Consumer>
-        {context => (
-          <ChildConsumer
-            {...props}
-            context={{
-              ...parentContext,
-              ...context
-            }}
-          />
-        )}
-      </ContextAPI.Consumer>
-    )
-  }
+  return React.forwardRef(({ context: parentContext = {}, ...props }, ref) => (
+    <ContextAPI.Consumer>
+      {context => (
+        <ChildConsumer
+          {...props}
+          ref={ref}
+          context={{
+            ...parentContext,
+            ...context
+          }}
+        />
+      )}
+    </ContextAPI.Consumer>
+  ))
 }
 
 function ContextConsumerHOC(...ContextAPIs) {
