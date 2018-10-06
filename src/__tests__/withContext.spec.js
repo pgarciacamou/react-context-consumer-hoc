@@ -291,4 +291,35 @@ describe('ContextConsumerHOC', () => {
     expect(spy).toHaveBeenCalledTimes(1)
   })
 
+  it('should throw if arguments are not correct', () => {
+    expect(() => {
+      withContext()('div') // wrong number of arguments
+    }).toThrow('Looks like you forgot to pass a ContextAPI to react-context-consumer-hoc.')
+    expect(() => {
+      withContext(
+        React.createContext()
+      )() // not valid Component
+    }).toThrow('Looks like you forgot to pass a Component to react-context-consumer-hoc.')
+    expect(() => {
+      withContext(
+        {} // not valid context
+      )('div')
+    }).toThrow('Expected a valid context but got "undefined".')
+    expect(() => {
+      withContext(
+        [] // not valid context
+      )('div')
+    }).toThrow('Expected a valid context but got "undefined".')
+    expect(() => {
+      withContext(
+        [React.createContext(), null] // not valid consumer
+      )('div')
+    }).toThrow('Expected selector to be a function or a string but got "object".')
+    expect(() => {
+      withContext(
+        [3] // not valid consumer
+      )('div')
+    }).toThrow('Expected a valid context but got "3".')
+  })
+
 })

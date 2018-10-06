@@ -1,4 +1,6 @@
 import React from 'react'
+import invariant from 'invariant'
+import * as ReactIs from 'react-is'
 import { getOptions } from './utils/getOptions';
 
 function consumeContext(ChildConsumer, ContextAPI) {
@@ -24,7 +26,18 @@ function consumeContext(ChildConsumer, ContextAPI) {
 }
 
 function withContext(...ContextAPIs) {
+  invariant(
+    ContextAPIs.length > 0,
+    'Looks like you forgot to pass a ContextAPI to react-context-consumer-hoc.'
+  )
+
   return ComposedComponent => {
+    invariant(
+      !!ComposedComponent &&
+      ReactIs.isValidElementType(ComposedComponent),
+      'Looks like you forgot to pass a Component to react-context-consumer-hoc.'
+    )
+
     // Recursively consume the APIs only once.
     return ContextAPIs.reduce(consumeContext, ComposedComponent)
   }

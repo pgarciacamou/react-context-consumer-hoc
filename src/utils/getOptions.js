@@ -1,7 +1,10 @@
 import isString from 'lodash.isstring';
+import { checkArgumentsValidity } from './checkArgumentsValidity';
 
 export function getOptions(ContextAPI) {
   const hasOptions = Array.isArray(ContextAPI)
+
+  checkArgumentsValidity(ContextAPI, hasOptions)
 
   if (hasOptions) {
     return {
