@@ -12,11 +12,13 @@ export default {
   output: [
     {
       file: pkg.main,
-      format: 'cjs'
+      format: 'cjs',
+      sourcemap: true
     },
     {
       file: pkg.module,
-      format: 'es'
+      format: 'es',
+      sourcemap: true
     }
   ],
   plugins: [
@@ -26,7 +28,8 @@ export default {
     }),
     url(),
     babel({
-      exclude: 'node_modules/**'
+      exclude: 'node_modules/**',
+      plugins: [ 'external-helpers' ]
     }),
     resolve(),
     commonjs()
