@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Changed
 
+## [v2.0.0](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/v2.0.0) - 2018-10-04
+### Added
+- Add Namespacing.
+- Add input validation using:
+  - `react-is`
+  - `invariant`
+  - `lodash.isfunction`
+  - `lodash.isstring`
+### Fixed
+- v1 is re-rendering PureComponents https://github.com/pgarciacamou/react-context-consumer-hoc/issues/7.
+### Changed
+- Deprecate the use of context wrapper (`this.props.context`) by directly injecting context as props.
+
 ## [v1.0.4](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/v1.0.4) - 2018-07-03
 ### Added
 ### Fixed
