@@ -67,8 +67,5 @@
   },
   "files": [
     "dist"
-  ],
-  "dependencies": {
-    "lodash.isstring": "^4.0.1"
-  }
+  ]
 }
