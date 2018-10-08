@@ -1,32 +1,44 @@
 import React from 'react'
-import { getOptions } from './utils/getOptions';
 
-function consumeContext(ChildConsumer, ContextAPI) {
+function consumeContext(InnerConsumer, ContextAPI) {
   // Ignore falsy values to prevent unhandled errors.
   // Only Arrays and React Context are allowed.
   if (!ContextAPI) {
-    return ChildConsumer;
+    return InnerConsumer;
   }
 
-  const { selector, consumer: Consumer } = getOptions(ContextAPI);
-
-  return React.forwardRef((props, ref) => (
-    <Consumer>
+  return React.forwardRef(({
+    __context_accum__: parentContext = {},
+    ...props
+  }, ref) => (
+    <ContextAPI.Consumer>
       {context => (
-        <ChildConsumer
+        <InnerConsumer
           {...props}
-          {...selector(context)}
+          __context_accum__={{
+            ...parentContext,
+            ...context
+          }}
           ref={ref}
         />
       )}
-    </Consumer>
+    </ContextAPI.Consumer>
   ))
 }
 
-function withContext(...ContextAPIs) {
+function withContext(ContextAPIs, selector) {
   return ComposedComponent => {
     // Recursively consume the APIs only once.
-    return ContextAPIs.reduce(consumeContext, ComposedComponent)
+    return ContextAPIs.reduce(
+      consumeContext,
+      React.forwardRef(({ __context_accum__: raw, ...props }, ref) => (
+        <ComposedComponent
+          {...props}
+          {...selector(raw)}
+          ref={ref}
+        />
+      ))
+    )
   }
 }
 
