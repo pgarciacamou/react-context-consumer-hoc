@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { withContext } from 'react-context-consumer-hoc'
+import { withContextAsProps } from 'react-context-consumer-hoc'
 
 // Context A
 const ContextA = React.createContext()
@@ -54,7 +54,7 @@ class RandomConsumer extends Component {
   }
 }
 
-const WrappedConsumer = withContext(ContextA, ContextB)(RandomConsumer)
+const WrappedConsumer = withContextAsProps(ContextA, ContextB)(RandomConsumer)
 
 export default class App extends Component {
   render() {
