@@ -245,10 +245,10 @@ export default class App extends Component {
 ## Contributors
 
 <!-- Contributors START
-pablo_garcia pgarciacamou https://twitter.com/pgarciacamou/ contributor
+pablo_garcia pgarciacamou https://twitter.com/pgarciacamou/ author contributor
 Contributors END -->
 <!-- Contributors table START -->
 | <img src="https://avatars.githubusercontent.com/pgarciacamou?s=100" width="100" alt="pablo garcia" /><br />[<sub>pablo garcia</sub>](https://twitter.com/pgarciacamou/)<br />💻 📖 💡 |
-| :---: | :---: |
+| :---: |
 <!-- Contributors table END -->
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification.
