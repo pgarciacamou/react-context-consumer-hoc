@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Changed
 
+## [v2.0.1](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/v2.0.1) - 2018-10-08
+### Added
+### Fixed
+- Removed unneeded `lodash.isstring` dependency
+### Changed
+
 ## [v2.0.0](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/v2.0.0) - 2018-10-04
 ### Added
 - New `withContext` takes in an array of context and `mapContextToProps` function
