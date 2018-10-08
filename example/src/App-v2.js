@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import ContextConsumerHOC from 'react-context-consumer-hoc'
+import { withContextAsProps } from 'react-context-consumer-hoc'
 
 // Context A
 const ContextA = React.createContext()
@@ -28,10 +28,8 @@ function ContextBProvider(props) {
 // Consumer of Context A and B
 class RandomConsumer extends Component {
   static propTypes = {
-    context: PropTypes.shape({
-      someValue: PropTypes.number.isRequired,
-      someOtherValue: PropTypes.number.isRequired
-    }).isRequired
+    someValue: PropTypes.number.isRequired,
+    someOtherValue: PropTypes.number.isRequired
   }
 
   constructor(props) {
@@ -39,27 +37,27 @@ class RandomConsumer extends Component {
 
     // do something in the state
     this.state = {
-      color: props.context.someValue > 0.5 ? 'white' : 'black'
+      color: props.someValue > 0.5 ? 'white' : 'black'
     }
   }
 
   render() {
-    const { context } = this.props
+    const { someValue, someOtherValue } = this.props
 
     return (
       <p>
-        Black or white? {context.someValue > 0.5 ? 'white' : 'black'}
+        Black or white? {someValue > 0.5 ? 'white' : 'black'}
         <br />
-        This is a random number: {context.someOtherValue}
+        This is a random number: {someOtherValue}
       </p>
     )
   }
 }
 
-const WrappedConsumer = ContextConsumerHOC(ContextA, ContextB)(RandomConsumer)
+const WrappedConsumer = withContextAsProps(ContextA, ContextB)(RandomConsumer)
 
 export default class App extends Component {
-  render () {
+  render() {
     return (
       <ContextAProvider>
         <ContextBProvider>

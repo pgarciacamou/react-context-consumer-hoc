@@ -1,27 +1,9 @@
-import React from 'react'
+import withContext from './withContext';
+import withContextAsProps from './withContextAsProps';
+import UNSAFE_withContext from './UNSAFE_withContext';
 
-function consumeContext(ChildConsumer, ContextAPI) {
-  return React.forwardRef(({ context: parentContext = {}, ...props }, ref) => (
-    <ContextAPI.Consumer>
-      {context => (
-        <ChildConsumer
-          {...props}
-          ref={ref}
-          context={{
-            ...parentContext,
-            ...context
-          }}
-        />
-      )}
-    </ContextAPI.Consumer>
-  ))
+export {
+  withContext,
+  withContextAsProps,
+  UNSAFE_withContext
 }
-
-function ContextConsumerHOC(...ContextAPIs) {
-  return ComposedComponent => {
-    // Recursively consume the APIs only once.
-    return ContextAPIs.reduce(consumeContext, ComposedComponent)
-  }
-}
-
-export default ContextConsumerHOC

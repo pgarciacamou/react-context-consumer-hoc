@@ -2,14 +2,14 @@
   "name": "react-context-consumer-hoc-example",
   "homepage": "https://pgarciacamou.github.io/react-context-consumer-hoc",
   "version": "0.0.0",
-  "private": true,
   "license": "MIT",
+  "private": true,
   "dependencies": {
-    "prop-types": "^15.6.1",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-context-consumer-hoc": "*",
-    "react-scripts": "^1.1.1"
+    "prop-types": "^15.6.2",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-scripts": "^1.1.4",
+    "react-context-consumer-hoc": "file:.."
   },
   "scripts": {
     "start": "react-scripts start",
