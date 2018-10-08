@@ -11,16 +11,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [v2.0.0](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/v2.0.0) - 2018-10-04
 ### Added
-- Add Namespacing.
+- New `withContext` takes in an array of context and `mapContextToProps` function
+- Renamed old `withContext` to `withContextAsProps` which takes in a comma-separated context list
 ### Fixed
-- v1 is re-rendering PureComponents https://github.com/pgarciacamou/react-context-consumer-hoc/issues/7.
+- v1 is re-rendering PureComponents https://github.com/pgarciacamou/react-context-consumer-hoc/issues/7
 ### Changed
-- Deprecate the use of context wrapper (`this.props.context`) by directly injecting context as props.
+- Deprecate the use of context wrapper (`this.props.context`) by directly injecting context as props
 
 ## [v1.0.4](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/v1.0.4) - 2018-07-03
 ### Added
 ### Fixed
-- Pass component reference to enhanced component
+- Pass component reference to enhanced component (via `React.forwardRef`)
 ### Changed
 
 ## [v1.0.3](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/v1.0.3) - 2018-06-27

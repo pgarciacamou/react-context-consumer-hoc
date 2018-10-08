@@ -14,54 +14,76 @@ npm install --save react-context-consumer-hoc
 
 ```jsx
 // MyComponent.js
-import { withContext } from 'react-context-consumer-hoc'
+import { withContext, withContextAsProps } from 'react-context-consumer-hoc'
 import { ContextA } from './MyContextAProvider' // => { a: 1 }
 import { ContextB } from './MyContextBProvider' // => { b: 2 }
 
-function MyComponent({ a, b }) { /* a === 1 && b === 2 //=> true */ }
+function MyComponent({ a, b, c }) {
+  c = c || a + b;
+  console.log(c === 3); // => true
+}
 
-export default withContext(ContextA, ContextB)(MyComponent)
+// passing all as props
+export default withContextAsProps(ContextA, ContextB)(MyComponent)
+
+// OR using mapContextToProps
+export default withContext(
+  [ContextA, ContextB],
+  function mapContextToProps({ a, b }) {
+    // this will only pass prop c and not a and b
+    // pro tip: use reselect to use memoization
+    return {
+      c: a + b
+    }
+  }
+)
 ```
-
-## Notation
-
-The context APIs must be passed as comma separated arguments. The component will then receive the context as props.
-
-`withContext(PlainContext1, PlainContext2, ...)(Component)`
-
-**Each argument** can be either:
-
-1. Regular Context API.
-  - `withContext(PlainContext1, PlainContext2, ...)(Component)`
-2. Array wrapping any single Context API (where index 0 is the Context).
-  - `withContext(..., [PlainContextN, selector], ...)(Component)`
-
-As illustrated, the second approach requires passing a selector (`function`) or namespace (`string`) as index 1.
-
-* **[function|required]** selector that takes in the context and returns an object which is destructured to be passed as props to the component `<Component {...selector(context)} />`.
-  - E.g. `withContext([PlainContext, (context) => ({ foo: context.foo })])(...)`
-  - E.g. `({ a, b }) => ({ c: a + b })`
-  - E.g. with `lodash` -> `context => _.pick(context, "foo")`
-  - E.g. with `reselect` -> `context => ContextSelectors.getPropFoo`
-* **[string|required]** namespace that will include the context.
-  - E.g. `withContext([PlainContext, "a"])(...)` which is the same as `(context) => ({ a: context })` or `<Component [namespace]={context} />`
 
 ## Usage
 
-### Simple example (same as above)
+### withContextAsProps
+
+`withContextAsProps(Context1[, Context2, ..., ContextN])(Component)`
+
+Wraps the Component with dynamically created consumers and passes all consumed context as props. `withContextAsProps` is a facade around `withContext`, providing a convenient API for the most common use cases.
+
+#### Arguments
+
+* `Context1[, Context2, ..., ContextN]` (*Comma-separated context list | required*): At least 1 context API is needed. The component will be wrapped in consumers from each of the context passed to `withContextAsProps`.
+
+  All `react-context-consumer-hoc` APIs wrap the new component once at export, i.e. there is no further computation done afterward.
+
+  > Note: in advanced scenarios where you need more control over the rendering performance, it is recommended to use `withContext`. In this case, you can pass a `mapContextToProps` function where you can specify which props from the context to *select* for a particular component instance. Most apps will not need this as long as the context doesn't change too often. One scenario could be if one of the context gets recomputed on every render but only a few really care about the changes.
+
+### withContext
+
+`withContext(contextList, mapContextToProps)(Component)`
+
+Wraps the Component with dynamically created consumers and passes all consumed context as props.
+
+#### Arguments
+
+* `contextList` (*Array | required*): A list of context API with at least 1. The component will be wrapped in consumers from each of the context in the array.
+* `mapContextToProps: contextProps` (*Function | required*): This function is called with all the consumed context on every render and the object returned will be destructured/passed as props to the component.
+
+  > Use `reselect` to efficiently compose selectors using memoization
+
+## Code Samples
+
+### Simple example using withContextAsProps
 
 ```jsx
 // MyComponent.js
-import { withContext } from 'react-context-consumer-hoc'
+import { withContextAsProps } from 'react-context-consumer-hoc'
 import { ContextA } from './MyContextAProvider' // => { a: 1 }
 import { ContextB } from './MyContextBProvider' // => { b: 2 }
 
 function MyComponent({ a, b }) { /* a === 1 && b === 2 //=> true */ }
 
-export default withContext(ContextA, ContextB)(MyComponent)
+export default withContextAsProps(ContextA, ContextB)(MyComponent)
 ```
 
-### Namespacing
+### Simple example using withContext
 
 ```jsx
 // MyComponent.js
@@ -69,62 +91,95 @@ import { withContext } from 'react-context-consumer-hoc'
 import { ContextA } from './MyContextAProvider' // => { a: 1 }
 import { ContextB } from './MyContextBProvider' // => { b: 2 }
 
-function MyComponent({ a, wrap }) { /* a === 1 && wrap.b === 2 //=> true */ }
+function MyComponent({ c }) { /* c === 3 //=> true */ }
 
 export default withContext(
-  ContextA,
-  [ContextB, "wrap"] // with namespace
+  [ContextA, ContextB],
+  function mapContextToProps({ a, b }) {
+    return {
+      c: a + b
+    }
+  }
 )(MyComponent)
 ```
 
 ### Selectors
 
-Selectors must return an object as it will be destructured to be passed as props to the Component.
+Selectors allow increasing rendering performance, for example, if a PureComponent only cares about a never changing property in a context that has multiple changing properties, then the use of a selector prevents unnecessary re-renders.
 
-Selectors allow increasing performance, for example, if a PureComponent only cares about a never changing property in a context that has multiple changing properties, then the use of a selector prevents unnecessary re-renders.
-
-Another added benefit is that selectors can be created with libraries like `reselect` that use memoization.
-
-```jsx
-// MyComponent.js
-import { withContext } from 'react-context-consumer-hoc'
-import { ContextA } from './MyContextAProvider' // => { a: 1, a: 2 }
-
-function MyComponent({ a, b }) { /* a === 1 && b === undefined //=> true */ }
-
-export default withContext(
-  /**
-   * This will only return "a" from ContextA ("b" will be undefined)
-   */
-  [ContextA, (context) => ({ a: context.a })]
-)(MyComponent)
-```
-
-Similar approach with `reselect`.
+> Use `reselect` to efficiently compose selectors using memoization
 
 ```jsx
 // ContextASelectors.js
 import { createSelector } from 'reselect'
-const _getPropA = (context) => context.a
-const _getPropB = (context) => context.b
-export const getAandB = createSelector(
-  [getPropA, getPropB],
-  (a, b) => ({ a, b }) // memoized!
+const getA = (context) => context.a
+const getB = (context) => context.b
+export const getSumOfAandB = createSelector(
+  [getA, getB],
+  (a, b) => a + b
 )
 
 // MyComponent.js
 import { withContext } from 'react-context-consumer-hoc'
-import { ContextA } from './MyContextAProvider' // => { a: 1, b: 2, a: 3 }
+import { ContextA } from './MyContextAProvider' // => { a: 1, b: 2, c: 3 }
 import * as ContextASelectors from './ContextASelectors'
 
-function MyComponent({ a, b, c }) { /* a === 1 && b === 2 && c === undefined //=> true */ }
+function MyComponent({ a, b, c, sum }) {
+  console.log(a === undefined); // true
+  console.log(b === undefined); // true
+  console.log(c === undefined); // true
+  console.log(sum === 3); // true
+  // ...
+}
 
 export default withContext(
   /**
    * This will only return "a" and "b" from ContextA ("c" will be undefined)
    */
-  [ContextA, getAandB]
+  [ContextA],
+  function mapContextToProps(context) {
+    return {
+      abSum: ContextSelectors.getSumOfAandB(context)
+    }
+  }
 )(MyComponent)
+```
+
+### Redux (connect)
+
+```jsx
+import { withContext } from "react-context-consumer-hoc"
+import { connect } from "react-redux"
+import { ContextA } from './MyContextAProvider' // => { a: 1, b: 2, c: 3 }
+
+function MyComponent() { /* ... */ }
+
+export default withContext(
+  [ContextA],
+  function mapContextToProps({ a }) {
+    return { a }
+  }
+)(
+  connect(
+    function mapStateToProps(state, ownProps) { /* ... */ }
+  )(MyComponent)
+)
+```
+
+Or using withContextAsProps
+
+```jsx
+import { withContextAsProps } from "react-context-consumer-hoc"
+import { connect } from "react-redux"
+import { ContextA } from './MyContextAProvider' // => { a: 1, b: 2, c: 3 }
+
+function MyComponent() { /* ... */ }
+
+export default withContextAsProps(ContextA)(
+  connect(
+    function mapStateToProps(state, ownProps) { /* ... */ }
+  )(MyComponent)
+)
 ```
 
 ### Full example
@@ -132,7 +187,7 @@ export default withContext(
 ```jsx
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { withContext } from 'react-context-consumer-hoc'
+import { withContextAsProps } from 'react-context-consumer-hoc'
 
 class SomeComponent extends Component {
   static propTypes = {
@@ -158,8 +213,8 @@ const ContextA = React.createContext()
 const ContextB = React.createContext()
 
 // this would normally look like
-//   export default withContext(ContextA, ContextB)(SomeComponent)
-const Consumer = withContext(ContextA, ContextB)(SomeComponent)
+//   export default withContextAsProps(ContextA, ContextB)(SomeComponent)
+const Consumer = withContextAsProps(ContextA, ContextB)(SomeComponent)
 
 export default class App extends Component {
   constructor() {
