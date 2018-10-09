@@ -1,7 +1,7 @@
 import React, { Component, PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import renderer from 'react-test-renderer'
-import { createSelector } from 'reselect'
+import { createSelector, createStructuredSelector } from 'reselect'
 import Enzyme, { mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import withContext from '../withContext'
@@ -276,6 +276,59 @@ describe('ContextConsumerHOC', () => {
     expect(component.prop('c')).toBeUndefined()
     expect(component.prop('d')).toEqual(contextA.b + contextA.c)
     expect(spy).toHaveBeenCalledWith({ d: contextA.b + contextA.c })
+    expect(spy).toHaveBeenCalledTimes(1)
+  })
+
+  it('allows using memoization with reselect 3 (namespaces with createStructuredSelector)', () => {
+    const spy = jest.fn()
+
+    // selectors
+    const getB = (context) => context.b
+    const getC = (context) => context.c
+    const getD = createSelector([getB, getC], (b, c) => b + c)
+
+    // simple example
+    const contextA = { a: 1, b: 2, c: 3 }
+    const ContextA = React.createContext(contextA)
+
+    // Because naked component doesn't care about prop 'c',
+    // it only renders if 'a' or 'b' change, as expected.
+    class NakedComponent extends PureComponent {
+      render() {
+        spy(this.props)
+        return (
+          <div className='component' {...this.props} />
+        )
+      }
+    }
+
+    const App = withContext(
+      [ContextA],
+      createStructuredSelector({
+        context: createStructuredSelector({
+          d: getD
+        })
+      })
+    )(NakedComponent)
+
+    const Root = (props) => (
+      <ContextA.Provider value={{ ...contextA, ...props }}>
+        <App />
+      </ContextA.Provider>
+    )
+    const wrapper = mount(
+      <Root c={3} />
+    )
+
+    wrapper.setProps({ a: 2 })
+
+    const component = wrapper.find('.component')
+
+    expect(component.prop('context').a).toBeUndefined()
+    expect(component.prop('context').b).toBeUndefined()
+    expect(component.prop('context').c).toBeUndefined()
+    expect(component.prop('context').d).toEqual(contextA.b + contextA.c)
+    expect(spy).toHaveBeenCalledWith({ context: { d: contextA.b + contextA.c } })
     expect(spy).toHaveBeenCalledTimes(1)
   })
 
