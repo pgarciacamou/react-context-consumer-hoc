@@ -9,12 +9,12 @@ function consumeContext(InnerConsumer, ContextAPI) {
 
   return React.forwardRef(({
     __context_accum__: parentContext = {},
-    ...props
+    ...ownProps
   }, ref) => (
     <ContextAPI.Consumer>
       {context => (
         <InnerConsumer
-          {...props}
+          {...ownProps}
           __context_accum__={{
             ...parentContext,
             ...context
@@ -31,10 +31,13 @@ function withContext(ContextAPIs, mapContextToProps) {
     // Recursively consume the APIs only once.
     return ContextAPIs.reduce(
       consumeContext,
-      React.forwardRef(({ __context_accum__: raw, ...props }, ref) => (
+      React.forwardRef(({
+        __context_accum__: raw,
+        ...ownProps
+      }, ref) => (
         <ComposedComponent
-          {...props}
-          {...mapContextToProps(raw)}
+          {...ownProps}
+          {...mapContextToProps(raw, ownProps)}
           ref={ref}
         />
       ))
