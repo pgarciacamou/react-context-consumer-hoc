@@ -30,6 +30,7 @@ npm install --save react-context-consumer-hoc
 - [Contributors](#author)
 
 ## Simple example
+[back to top](#documentation)
 
 ```jsx
 // MyComponent.js
@@ -59,8 +60,10 @@ export default withContext(
 ```
 
 ## API
+[back to top](#documentation)
 
 ### withContextAsProps
+[back to top](#documentation)
 
 `withContextAsProps(Context1[, Context2, ..., ContextN])(Component)`
 
@@ -75,6 +78,7 @@ Wraps the Component with dynamically created consumers and passes all consumed c
   > Note: in advanced scenarios where you need more control over the rendering performance, it is recommended to use `withContext`. In this case, you can pass a `mapContextToProps` function where you can specify which props from the context to *select* for a particular component instance. Most apps will not need this as long as the context doesn't change too often. One scenario could be if one of the context gets recomputed on every render but only a few really care about the changes.
 
 ### withContext
+[back to top](#documentation)
 
 `withContext(contextList, mapContextToProps)(Component)`
 
@@ -88,6 +92,7 @@ Wraps the Component with dynamically created consumers and passes all consumed c
   > Use `reselect` to efficiently compose selectors using memoization
 
 ### UNSAFE_withContext
+[back to top](#documentation)
 
 > WARNING: [**deprecated**] Will be removed in v3.
 >   This method passes a new object everytime the top-most component is rendered, causing issues with `PureComponent`s, and anything that implements a shallow comparison (triple equal).
@@ -105,8 +110,10 @@ Wraps the Component with dynamically created consumers and passes all consumed c
   All `react-context-consumer-hoc` APIs wrap the new component once at export, i.e. there is no further computation done afterward.
 
 ## Code Samples
+[back to top](#documentation)
 
 ### Simple example using withContextAsProps
+[back to top](#documentation)
 
 ```jsx
 // MyComponent.js
@@ -120,6 +127,7 @@ export default withContextAsProps(ContextA, ContextB)(MyComponent)
 ```
 
 ### Simple example using withContext
+[back to top](#documentation)
 
 ```jsx
 // MyComponent.js
@@ -140,6 +148,7 @@ export default withContext(
 ```
 
 ### Simple example using UNSAFE_withContext
+[back to top](#documentation)
 
 ```jsx
 // MyComponent.js
@@ -153,6 +162,7 @@ export default UNSAFE_withContext(ContextA, ContextB)(MyComponent)
 ```
 
 ### Selectors using reselect
+[back to top](#documentation)
 
 Selectors allow increasing rendering performance, for example, if a PureComponent only cares about a never changing property in a context that has multiple changing properties, then the use of a selector prevents unnecessary re-renders.
 
@@ -195,6 +205,7 @@ export default withContext(
 ```
 
 #### Namespacing using createStructuredSelector
+[back to top](#documentation)
 
 Let's say you want to reconstruct the `UNSAFE_withContext` API to wrap context in an object, e.g. `this.props.context`. Then, we can simply do the following:
 
@@ -225,12 +236,14 @@ export default withContext(
 ```
 
 ### Redux
+[back to top](#documentation)
 
 There is a bug with react-redux and React.forwardRef, see issue #6 for more information. But basically, we currently cannot pass an object to `react-redux -> connect()(/* here */)`.
 
 There are 2 workarounds:
 
 #### Wrap connected component
+[back to top](#documentation)
 
 > NOTE: this will still most likely not work with `withRef` option from `react-redux -> connect()`.
 
@@ -255,6 +268,7 @@ export default withContext(
 ```
 
 #### noRef
+[back to top](#documentation)
 
 `[withContext|withContextAsProps|UNSAFE_withContext].noRef`
 
@@ -278,6 +292,7 @@ export default connect(
 ```
 
 ### Full example
+[back to top](#documentation)
 
 ```jsx
 import React, { Component } from 'react'
@@ -334,6 +349,7 @@ export default class App extends Component {
 ```
 
 ## Author
+[back to top](#documentation)
 
 * Pablo Garcia [@pgarciacamou](https://twitter.com/pgarciacamou/)
 
