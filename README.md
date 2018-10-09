@@ -10,6 +10,23 @@
 npm install --save react-context-consumer-hoc
 ```
 
+## Documentation
+
+- [Simple Example](#simple-example)
+- [API](#api)
+  - [`withContextAsProps(Context1[, Context2, ..., ContextN])`](#withcontextasprops)
+  - [`withContext(contextList, mapContextToProps)`](#withcontext)
+- [Code Samples](#code-samples)
+  - [Simple example using `withContextAsProps`](#simple-example-using-withcontextasprops)
+  - [Simple example using `withContext`](#simple-example-using-withcontextas)
+  - [Selectors using `reselect`](#selectors-with-reselect)
+    - [Namespacing using `createStructuredSelector`](#namespacing-with-createstructuredselector)
+  - [Redux](#redux)
+    -[Wrap connected component](#wrap-connected-component)
+    -[`noRef`](#noref)
+  - [Full example](#full-example)
+- [Contributors](#author)
+
 ## Simple example
 
 ```jsx
@@ -39,7 +56,7 @@ export default withContext(
 )
 ```
 
-## Usage
+## API
 
 ### withContextAsProps
 
@@ -103,7 +120,7 @@ export default withContext(
 )(MyComponent)
 ```
 
-### Selectors with reselect
+### Selectors using reselect
 
 Selectors allow increasing rendering performance, for example, if a PureComponent only cares about a never changing property in a context that has multiple changing properties, then the use of a selector prevents unnecessary re-renders.
 
@@ -145,9 +162,9 @@ export default withContext(
 )(MyComponent)
 ```
 
-### Namespacing with reselect (createStructuredSelector)
+#### Namespacing using createStructuredSelector
 
-Let's say you want to reconstruct the `UNSAFE_withContext` API to wrap context in an object, e.g. `this.props.context`. Then, we can simply do the following: 
+Let's say you want to reconstruct the `UNSAFE_withContext` API to wrap context in an object, e.g. `this.props.context`. Then, we can simply do the following:
 
 ```js
 import { createStructuredSelector } from 'reselect'
@@ -175,13 +192,13 @@ export default withContext(
 )(MyComponent)
 ```
 
-### Redux (react-redux -> connect)
+### Redux
 
 There is a bug with react-redux and React.forwardRef, see issue #6 for more information. But basically, we currently cannot pass an object to `react-redux -> connect()(/* here */)`.
 
 There are 2 workarounds:
 
-#### Wrap the connected component with the API
+#### Wrap connected component
 
 > NOTE: this will still most likely not work with `withRef` option from `react-redux -> connect()`.
 
