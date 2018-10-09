@@ -52,9 +52,7 @@ function UNSAFE_withContext(...ContextAPIs) {
 function noRef(...ContextAPIs) {
   return ComposedComponent => {
     const Component = UNSAFE_withContext(...ContextAPIs)(ComposedComponent)
-    return (props) => (
-      <Component {...props} />
-    )
+    return props => (<Component {...props} />)
   }
 }
 

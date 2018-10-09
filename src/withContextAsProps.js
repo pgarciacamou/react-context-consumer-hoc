@@ -15,9 +15,7 @@ function withContextAsProps(...ContextAPIs) {
 function noRef(...ContextAPIs) {
   return ComposedComponent => {
     const Component = withContext(ContextAPIs, mapContextToProps)(ComposedComponent)
-    return (props) => (
-      <Component {...props} />
-    )
+    return props => (<Component {...props} />)
   }
 }
 
