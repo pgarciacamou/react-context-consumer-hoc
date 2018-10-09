@@ -42,4 +42,20 @@ function withContext(ContextAPIs, selector) {
   }
 }
 
-export default withContext;
+/**
+ * Temporary workaround to fix react-redux issue with forwardRef.
+ * This workaround will be removed on v3.
+ *
+ * Issue: https://github.com/pgarciacamou/react-context-consumer-hoc/issues/6
+ */
+function noRef(ContextAPIs, selector) {
+  return ComposedComponent => {
+    const Component = withContext(ContextAPIs, selector)(ComposedComponent)
+    return (props) => (
+      <Component {...props} />
+    )
+  }
+}
+
+withContext.noRef = noRef
+export default withContext

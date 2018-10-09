@@ -43,4 +43,20 @@ function UNSAFE_withContext(...ContextAPIs) {
   }
 }
 
+/**
+ * Temporary workaround to fix react-redux issue with forwardRef.
+ * This workaround will be removed on v3.
+ *
+ * Issue: https://github.com/pgarciacamou/react-context-consumer-hoc/issues/6
+ */
+function noRef(...ContextAPIs) {
+  return ComposedComponent => {
+    const Component = UNSAFE_withContext(...ContextAPIs)(ComposedComponent)
+    return (props) => (
+      <Component {...props} />
+    )
+  }
+}
+
+UNSAFE_withContext.noRef = noRef
 export default UNSAFE_withContext
