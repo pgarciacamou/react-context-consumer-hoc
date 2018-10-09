@@ -10,7 +10,27 @@
 npm install --save react-context-consumer-hoc
 ```
 
+## Documentation
+
+- [Simple Example](#simple-example)
+- [API](#api)
+  - [`withContextAsProps(Context1[, Context2, ..., ContextN])`](#withcontextasprops)
+  - [`withContext(contextList, mapContextToProps)`](#withcontext)
+  - [`UNSAFE_withContext(Context1[, Context2, ..., ContextN])`](#unsafe_withcontext)
+- [Code Samples](#code-samples)
+  - [Simple example using `withContextAsProps`](#simple-example-using-withcontextasprops)
+  - [Simple example using `withContext`](#simple-example-using-withcontext)
+  - [Simple example using `UNSAFE_withContext`](#simple-example-using-unsafe_withcontext)
+  - [Selectors using `reselect`](#selectors-using-reselect)
+    - [Namespacing using `createStructuredSelector`](#namespacing-using-createstructuredselector)
+  - [Redux](#redux)
+    - [Wrap connected component](#wrap-connected-component)
+    - [`noRef`](#noref)
+  - [Full example](#full-example)
+- [Contributors](#author)
+
 ## Simple example
+[back to top](#documentation)
 
 ```jsx
 // MyComponent.js
@@ -39,9 +59,11 @@ export default withContext(
 )
 ```
 
-## Usage
+## API
+[back to top](#documentation)
 
 ### withContextAsProps
+[back to top](#documentation)
 
 `withContextAsProps(Context1[, Context2, ..., ContextN])(Component)`
 
@@ -56,6 +78,7 @@ Wraps the Component with dynamically created consumers and passes all consumed c
   > Note: in advanced scenarios where you need more control over the rendering performance, it is recommended to use `withContext`. In this case, you can pass a `mapContextToProps` function where you can specify which props from the context to *select* for a particular component instance. Most apps will not need this as long as the context doesn't change too often. One scenario could be if one of the context gets recomputed on every render but only a few really care about the changes.
 
 ### withContext
+[back to top](#documentation)
 
 `withContext(contextList, mapContextToProps)(Component)`
 
@@ -68,9 +91,29 @@ Wraps the Component with dynamically created consumers and passes all consumed c
 
   > Use `reselect` to efficiently compose selectors using memoization
 
+### UNSAFE_withContext
+[back to top](#documentation)
+
+> WARNING: [**deprecated**] Will be removed in v3.
+>   This method passes a new object everytime the top-most component is rendered, causing issues with `PureComponent`s, and anything that implements a shallow comparison (triple equal).
+
+`UNSAFE_withContext(Context1[, Context2, ..., ContextN])(Component)`
+
+Wraps the Component with dynamically created consumers and passes all consumed context wrapped in a new object called `context`. This method was kept to keep compatibility with the previous implementation but it is recommended not to use it.
+
+**This method can be refactored to use [namespaces with `reselect`](#namespacing-using-createstructuredselector).**
+
+#### Arguments
+
+* `Context1[, Context2, ..., ContextN]` (*Comma-separated context list | required*): At least 1 context API is needed. The component will be wrapped in consumers from each of the context passed to `withContextAsProps`.
+
+  All `react-context-consumer-hoc` APIs wrap the new component once at export, i.e. there is no further computation done afterward.
+
 ## Code Samples
+[back to top](#documentation)
 
 ### Simple example using withContextAsProps
+[back to top](#documentation)
 
 ```jsx
 // MyComponent.js
@@ -84,6 +127,7 @@ export default withContextAsProps(ContextA, ContextB)(MyComponent)
 ```
 
 ### Simple example using withContext
+[back to top](#documentation)
 
 ```jsx
 // MyComponent.js
@@ -103,7 +147,22 @@ export default withContext(
 )(MyComponent)
 ```
 
-### Selectors with reselect
+### Simple example using UNSAFE_withContext
+[back to top](#documentation)
+
+```jsx
+// MyComponent.js
+import { UNSAFE_withContext } from 'react-context-consumer-hoc'
+import { ContextA } from './MyContextAProvider' // => { a: 1 }
+import { ContextB } from './MyContextBProvider' // => { b: 2 }
+
+function MyComponent({ context: { a, b } }) { /* a === 1 && b === 2 //=> true */ }
+
+export default UNSAFE_withContext(ContextA, ContextB)(MyComponent)
+```
+
+### Selectors using reselect
+[back to top](#documentation)
 
 Selectors allow increasing rendering performance, for example, if a PureComponent only cares about a never changing property in a context that has multiple changing properties, then the use of a selector prevents unnecessary re-renders.
 
@@ -145,9 +204,10 @@ export default withContext(
 )(MyComponent)
 ```
 
-### Namespacing with reselect (createStructuredSelector)
+#### Namespacing using createStructuredSelector
+[back to top](#documentation)
 
-Let's say you want to reconstruct the `UNSAFE_withContext` API to wrap context in an object, e.g. `this.props.context`. Then, we can simply do the following: 
+Let's say you want to reconstruct the `UNSAFE_withContext` API to wrap context in an object, e.g. `this.props.context`. Then, we can simply do the following:
 
 ```js
 import { createStructuredSelector } from 'reselect'
@@ -175,7 +235,17 @@ export default withContext(
 )(MyComponent)
 ```
 
-### Redux (connect)
+### Redux
+[back to top](#documentation)
+
+There is a bug with react-redux and React.forwardRef, see issue #6 for more information. But basically, we currently cannot pass an object to `react-redux -> connect()(/* here */)`.
+
+There are 2 workarounds:
+
+#### Wrap connected component
+[back to top](#documentation)
+
+> NOTE: this will still most likely not work with `withRef` option from `react-redux -> connect()`.
 
 ```jsx
 import { withContext } from "react-context-consumer-hoc"
@@ -184,6 +254,7 @@ import { ContextA } from './MyContextAProvider' // => { a: 1, b: 2, c: 3 }
 
 function MyComponent() { /* ... */ }
 
+// The same thing can be done using withContextAsProps and UNSAFE_withContext
 export default withContext(
   [ContextA],
   function mapContextToProps({ a }) {
@@ -196,7 +267,14 @@ export default withContext(
 )
 ```
 
-Or using withContextAsProps
+#### noRef
+[back to top](#documentation)
+
+`[withContext|withContextAsProps|UNSAFE_withContext].noRef`
+
+`noRef` is a simple wrapper around the components returned by all the APIs to work around the `react-redux -> connect()` bug with React.forwardRef, see issue #6 for more information.
+
+> NOTE: this will still most likely not work with `withRef` option from `react-redux -> connect()`.
 
 ```jsx
 import { withContextAsProps } from "react-context-consumer-hoc"
@@ -205,14 +283,16 @@ import { ContextA } from './MyContextAProvider' // => { a: 1, b: 2, c: 3 }
 
 function MyComponent() { /* ... */ }
 
-export default withContextAsProps(ContextA)(
-  connect(
-    function mapStateToProps(state, ownProps) { /* ... */ }
-  )(MyComponent)
+export default connect(
+  function mapStateToProps(state, ownProps) { /* ... */ }
+)(
+  // The same thing can be done using withContext and UNSAFE_withContext
+  withContextAsProps.noRef(ContextA)(MyComponent)
 )
 ```
 
 ### Full example
+[back to top](#documentation)
 
 ```jsx
 import React, { Component } from 'react'
@@ -269,6 +349,7 @@ export default class App extends Component {
 ```
 
 ## Author
+[back to top](#documentation)
 
 * Pablo Garcia [@pgarciacamou](https://twitter.com/pgarciacamou/)
 

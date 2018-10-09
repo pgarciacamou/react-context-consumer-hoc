@@ -26,7 +26,7 @@ function consumeContext(InnerConsumer, ContextAPI) {
   ))
 }
 
-function withContext(ContextAPIs, selector) {
+function withContext(ContextAPIs, mapContextToProps) {
   return ComposedComponent => {
     // Recursively consume the APIs only once.
     return ContextAPIs.reduce(
@@ -34,7 +34,7 @@ function withContext(ContextAPIs, selector) {
       React.forwardRef(({ __context_accum__: raw, ...props }, ref) => (
         <ComposedComponent
           {...props}
-          {...selector(raw)}
+          {...mapContextToProps(raw)}
           ref={ref}
         />
       ))
@@ -42,4 +42,18 @@ function withContext(ContextAPIs, selector) {
   }
 }
 
-export default withContext;
+/**
+ * Temporary workaround to fix react-redux issue with forwardRef.
+ * This workaround will be removed on v3.
+ *
+ * Issue: https://github.com/pgarciacamou/react-context-consumer-hoc/issues/6
+ */
+function noRef(ContextAPIs, mapContextToProps) {
+  return ComposedComponent => {
+    const Component = withContext(ContextAPIs, mapContextToProps)(ComposedComponent)
+    return props => (<Component {...props} />)
+  }
+}
+
+withContext.noRef = noRef
+export default withContext
