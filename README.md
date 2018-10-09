@@ -87,7 +87,7 @@ Wraps the Component with dynamically created consumers and passes all consumed c
 #### Arguments
 
 * `contextList` (*Array | required*): A list of context API with at least 1. The component will be wrapped in consumers from each of the context in the array.
-* `mapContextToProps: contextProps` (*Function | required*): This function is called with all the consumed context on every render and the object returned will be destructured/passed as props to the component.
+* `mapContextToProps(context, ownProps): contextPropsObject` (*Function | required*): This function is called with 2 arguments and must return an object conatining the props that will be passed to the component. The first argument is the consumed context from the APIs and the second argument is the props that are being passed to the component. `mapContextToProps` must return an object Note that this function is called on every render and the object returned will be destructured/passed as props to the component.
 
   > Use `reselect` to efficiently compose selectors using memoization
 
@@ -135,13 +135,13 @@ import { withContext } from 'react-context-consumer-hoc'
 import { ContextA } from './MyContextAProvider' // => { a: 1 }
 import { ContextB } from './MyContextBProvider' // => { b: 2 }
 
-function MyComponent({ c }) { /* c === 3 //=> true */ }
+function MyComponent({ c, d }) { /* c === (3 + d) //=> true */ }
 
 export default withContext(
   [ContextA, ContextB],
-  function mapContextToProps({ a, b }) {
+  function mapContextToProps({ a, b }, ownProps) {
     return {
-      c: a + b
+      c: a + b + ownProps.d // let's say d is a number
     }
   }
 )(MyComponent)
@@ -192,9 +192,6 @@ function MyComponent({ a, b, c, sum }) {
 }
 
 export default withContext(
-  /**
-   * This will only return "a" and "b" from ContextA ("c" will be undefined)
-   */
   [ContextA],
   function mapContextToProps(context) {
     return {
