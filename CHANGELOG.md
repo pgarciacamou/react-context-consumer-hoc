@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Changed
 
+## [v2.1.0](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/v2.1.0) - 2018-10-09
+### Added
+- Introduce `noRef` to all APIs
+### Fixed
+- Does not work with react-redux connect https://github.com/pgarciacamou/react-context-consumer-hoc/issues/6
+### Changed
+
 ## [v2.0.1](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/v2.0.1) - 2018-10-08
 ### Added
 ### Fixed
