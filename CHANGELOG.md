@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Introduce `noRef` to all APIs
 - Add concept of `nampespacing`
+- [feature] pass component own props https://github.com/pgarciacamou/react-context-consumer-hoc/pull/13
 ### Fixed
 - Does not work with react-redux connect https://github.com/pgarciacamou/react-context-consumer-hoc/issues/6
 ### Changed
