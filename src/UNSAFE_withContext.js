@@ -16,7 +16,7 @@ import React from 'react'
  * of some projects that use ImmutableJS (or alike), as well as memoization.
  *
  * Use the new implementation of `withContext` (> v1.x) where you can specify
- * a selector (e.g. reselect) or namespaces for each individual context.
+ * a selector function mapContextToProps.
  */
 
 function consumeContext(ChildConsumer, ContextAPI) {
