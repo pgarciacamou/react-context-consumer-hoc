@@ -175,7 +175,15 @@ export default withContext(
 )(MyComponent)
 ```
 
-### Redux (connect)
+### Redux (react-redux -> connect)
+
+There is a bug with react-redux and React.forwardRef, see issue #6 for more information. But basically, we currently cannot pass an object to `react-redux -> connect()(/* here */)`.
+
+There are 2 workarounds:
+
+#### Wrap the connected component with the API
+
+> NOTE: this will still most likely not work with `withRef` option from `react-redux -> connect()`.
 
 ```jsx
 import { withContext } from "react-context-consumer-hoc"
@@ -184,6 +192,7 @@ import { ContextA } from './MyContextAProvider' // => { a: 1, b: 2, c: 3 }
 
 function MyComponent() { /* ... */ }
 
+// The same thing can be done using withContextAsProps and UNSAFE_withContext
 export default withContext(
   [ContextA],
   function mapContextToProps({ a }) {
@@ -196,7 +205,13 @@ export default withContext(
 )
 ```
 
-Or using withContextAsProps
+#### noRef
+
+`[withContext|withContextAsProps|UNSAFE_withContext].noRef`
+
+`noRef` is a simple wrapper around the components returned by all the APIs to work around the `react-redux -> connect()` bug with React.forwardRef, see issue #6 for more information.
+
+> NOTE: this will still most likely not work with `withRef` option from `react-redux -> connect()`.
 
 ```jsx
 import { withContextAsProps } from "react-context-consumer-hoc"
@@ -205,10 +220,11 @@ import { ContextA } from './MyContextAProvider' // => { a: 1, b: 2, c: 3 }
 
 function MyComponent() { /* ... */ }
 
-export default withContextAsProps(ContextA)(
-  connect(
-    function mapStateToProps(state, ownProps) { /* ... */ }
-  )(MyComponent)
+export default connect(
+  function mapStateToProps(state, ownProps) { /* ... */ }
+)(
+  // The same thing can be done using withContext and UNSAFE_withContext
+  withContextAsProps.noRef(ContextA)(MyComponent)
 )
 ```
 
