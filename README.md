@@ -16,6 +16,7 @@ npm install --save react-context-consumer-hoc
 - [API](#api)
   - [`withContextAsProps(Context1[, Context2, ..., ContextN])`](#withcontextasprops)
   - [`withContext(contextList, mapContextToProps)`](#withcontext)
+  - [`UNSAFE_withContext(Context1[, Context2, ..., ContextN])`](#unsafewithcontext)
 - [Code Samples](#code-samples)
   - [Simple example using `withContextAsProps`](#simple-example-using-withcontextasprops)
   - [Simple example using `withContext`](#simple-example-using-withcontextas)
@@ -85,6 +86,23 @@ Wraps the Component with dynamically created consumers and passes all consumed c
 
   > Use `reselect` to efficiently compose selectors using memoization
 
+### UNSAFE_withContext
+
+> WARNING: [**deprecated**] Will be removed in v3.
+>   This method passes a new object everytime the top-most component is rendered, causing issues with `PureComponent`s, and anything that implements a shallow comparison (triple equal).
+
+`UNSAFE_withContext(Context1[, Context2, ..., ContextN])(Component)`
+
+Wraps the Component with dynamically created consumers and passes all consumed context wrapped in a new object called `context`. This method was kept to keep compatibility with the previous implementation but it is recommended not to use it.
+
+**This method can be refactored to use [namespaces with `reselect`](#namespacing-using-createstructuredselector).**
+
+#### Arguments
+
+* `Context1[, Context2, ..., ContextN]` (*Comma-separated context list | required*): At least 1 context API is needed. The component will be wrapped in consumers from each of the context passed to `withContextAsProps`.
+
+  All `react-context-consumer-hoc` APIs wrap the new component once at export, i.e. there is no further computation done afterward.
+
 ## Code Samples
 
 ### Simple example using withContextAsProps
@@ -118,6 +136,19 @@ export default withContext(
     }
   }
 )(MyComponent)
+```
+
+### Simple example using UNSAFE_withContext
+
+```jsx
+// MyComponent.js
+import { UNSAFE_withContext } from 'react-context-consumer-hoc'
+import { ContextA } from './MyContextAProvider' // => { a: 1 }
+import { ContextB } from './MyContextBProvider' // => { b: 2 }
+
+function MyComponent({ context: { a, b } }) { /* a === 1 && b === 2 //=> true */ }
+
+export default UNSAFE_withContext(ContextA, ContextB)(MyComponent)
 ```
 
 ### Selectors using reselect
