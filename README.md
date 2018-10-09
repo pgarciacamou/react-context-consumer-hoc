@@ -164,7 +164,8 @@ function MyComponent(props) {
 
 export default withContext(
   [ContextA, ContextB],
-  // react-context-consumer-hoc will pass the context to the structured selector and reselect will do the heavy lifting
+  // react-context-consumer-hoc will pass the context to the
+  // structured selector and reselect will do the heavy lifting
   createStructuredSelector({
     context: createStructuredSelector({
       a: ContextASelectors.getA,
