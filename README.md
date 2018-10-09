@@ -147,7 +147,7 @@ export default withContext(
 
 ### Namespacing with reselect (createStructuredSelector)
 
-Let's say you want to reconstruct the `UNSAFE_withContext` API to wrap context in an object, e.g. `this.props.context`. Then, 
+Let's say you want to reconstruct the `UNSAFE_withContext` API to wrap context in an object, e.g. `this.props.context`. Then, we can simply do the following: 
 
 ```js
 import { createStructuredSelector } from 'reselect'
