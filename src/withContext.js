@@ -26,7 +26,7 @@ function consumeContext(InnerConsumer, ContextAPI) {
   ))
 }
 
-function withContext(ContextAPIs, selector) {
+function withContext(ContextAPIs, mapContextToProps) {
   return ComposedComponent => {
     // Recursively consume the APIs only once.
     return ContextAPIs.reduce(
@@ -34,7 +34,7 @@ function withContext(ContextAPIs, selector) {
       React.forwardRef(({ __context_accum__: raw, ...props }, ref) => (
         <ComposedComponent
           {...props}
-          {...selector(raw)}
+          {...mapContextToProps(raw)}
           ref={ref}
         />
       ))
@@ -48,9 +48,9 @@ function withContext(ContextAPIs, selector) {
  *
  * Issue: https://github.com/pgarciacamou/react-context-consumer-hoc/issues/6
  */
-function noRef(ContextAPIs, selector) {
+function noRef(ContextAPIs, mapContextToProps) {
   return ComposedComponent => {
-    const Component = withContext(ContextAPIs, selector)(ComposedComponent)
+    const Component = withContext(ContextAPIs, mapContextToProps)(ComposedComponent)
     return (props) => (
       <Component {...props} />
     )

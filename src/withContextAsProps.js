@@ -1,9 +1,9 @@
 import withContext from "./withContext"
 
-const contextAsIs = context => context;
+const mapContextToProps = context => context;
 
 function withContextAsProps(...ContextAPIs) {
-  return withContext(ContextAPIs, contextAsIs)
+  return withContext(ContextAPIs, mapContextToProps)
 }
 
 /**
@@ -14,7 +14,7 @@ function withContextAsProps(...ContextAPIs) {
  */
 function noRef(...ContextAPIs) {
   return ComposedComponent => {
-    const Component = withContext(ContextAPIs, contextAsIs)(ComposedComponent)
+    const Component = withContext(ContextAPIs, mapContextToProps)(ComposedComponent)
     return (props) => (
       <Component {...props} />
     )
