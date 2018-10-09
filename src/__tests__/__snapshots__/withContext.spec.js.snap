@@ -28,3 +28,9 @@ Array [
 </div>,
 ]
 `;
+
+exports[`ContextConsumerHOC should pass ownProps to mapContextToProps 1`] = `
+<div
+  b={2}
+/>
+`;

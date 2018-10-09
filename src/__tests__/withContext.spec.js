@@ -85,6 +85,27 @@ describe('ContextConsumerHOC', () => {
     expect(ref.current.constructor).toEqual(SomeComponent)
   })
 
+  it('should pass ownProps to mapContextToProps', () => {
+    const props = { b: 2 }
+    const childContextA = { a: 1 }
+    const ContextA = React.createContext(childContextA)
+    const Consumer = withContext(
+      [ContextA],
+      (context, ownProps) => {
+        expect(ownProps).toEqual(props)
+        return {}
+      }
+    )((props) => (<div {...props} />))
+
+    const tree = renderer.create(
+      <ContextA.Provider value={childContextA}>
+        <Consumer {...props} />
+      </ContextA.Provider>
+    )
+
+    expect(tree.toJSON()).toMatchSnapshot()
+  })
+
   it('should not re-render PureComponents if props did not change', () => {
     const spy = jest.fn()
     const ContextA = React.createContext()
