@@ -103,7 +103,7 @@ export default withContext(
 )(MyComponent)
 ```
 
-### Selectors
+### Selectors with reselect
 
 Selectors allow increasing rendering performance, for example, if a PureComponent only cares about a never changing property in a context that has multiple changing properties, then the use of a selector prevents unnecessary re-renders.
 
@@ -142,6 +142,35 @@ export default withContext(
       abSum: ContextSelectors.getSumOfAandB(context)
     }
   }
+)(MyComponent)
+```
+
+### Namespacing with reselect (createStructuredSelector)
+
+Let's say you want to reconstruct the `UNSAFE_withContext` API to wrap context in an object, e.g. `this.props.context`. Then, 
+
+```js
+import { createStructuredSelector } from 'reselect'
+import { ContextA } from './MyContextAProvider' // => { a: 1 }
+import { ContextB } from './MyContextBProvider' // => { b: 2 }
+import * as ContextASelectors from '../selectors/ContextASelectors'
+import * as ContextBSelectors from '../selectors/ContextBSelectors'
+// ...
+
+function MyComponent(props) {
+  console.log(props) // { context: { a: 1 , b: 2 } }
+  // ...
+}
+
+export default withContext(
+  [ContextA, ContextB],
+  // react-context-consumer-hoc will pass the context to the structured selector and reselect will do the heavy lifting
+  createStructuredSelector({
+    context: createStructuredSelector({
+      a: ContextASelectors.getA,
+      b: ContextBSelectors.getB
+    })
+  })
 )(MyComponent)
 ```
 
