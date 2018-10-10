@@ -39,8 +39,8 @@ import { ContextA } from './MyContextAProvider' // => { a: 1 }
 import { ContextB } from './MyContextBProvider' // => { b: 2 }
 
 function MyComponent({ a, b, c }) {
-  c = c || a + b;
-  console.log(c === 3); // => true
+  c = c || a + b
+  console.log(c === 3) // => true
 }
 
 // passing all as props
@@ -184,10 +184,10 @@ import { ContextA } from './MyContextAProvider' // => { a: 1, b: 2, c: 3 }
 import * as ContextASelectors from './ContextASelectors'
 
 function MyComponent({ a, b, c, sum }) {
-  console.log(a === undefined); // true
-  console.log(b === undefined); // true
-  console.log(c === undefined); // true
-  console.log(sum === 3); // true
+  console.log(a === undefined) // true
+  console.log(b === undefined) // true
+  console.log(c === undefined) // true
+  console.log(sum === 3) // true
   // ...
 }
 

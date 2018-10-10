@@ -122,7 +122,7 @@ describe('ContextConsumerHOC', () => {
     const Consumer = withContext(
       [ContextA, ContextB],
       function mapContextToProps(context) {
-        return context;
+        return context
       }
     )(NakedPureComponent)
 

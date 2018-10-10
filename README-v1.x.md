@@ -22,7 +22,7 @@ import { ContextB } from './MyContextBProvider'
 
 function MyComponent({ context }) { /* ... */ }
 
-export default withContext(ContextA, ContextB)(MyComponent);
+export default withContext(ContextA, ContextB)(MyComponent)
 ```
 
 A full example:

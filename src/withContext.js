@@ -1,48 +1,23 @@
 import React from 'react'
+import { createContextConsumerChain } from './utils/createContextConsumerChain'
 
-function consumeContext(InnerConsumer, ContextAPI) {
-  // Ignore falsy values to prevent unhandled errors.
-  // Only Arrays and React Context are allowed.
-  if (!ContextAPI) {
-    return InnerConsumer;
-  }
+function withContext(ContextAPIs, mapContextToProps) {
+  const ConsumerChain = createContextConsumerChain(ContextAPIs)
 
-  return React.forwardRef(({
-    __context_accum__: parentContext = {},
-    ...ownProps
-  }, ref) => (
-    <ContextAPI.Consumer>
-      {context => (
-        <InnerConsumer
-          {...ownProps}
-          __context_accum__={{
-            ...parentContext,
-            ...context
-          }}
+  return ComposedComponent => React.forwardRef((props, ref) => (
+    <ConsumerChain
+      // This prop is passed down through the consumer chain and will only
+      // be executed by the InnermostComponent this way we use React forwardRef
+      // only once at the top level.
+      render={context => (
+        <ComposedComponent
+          {...props}
+          {...mapContextToProps(context, props)}
           ref={ref}
         />
       )}
-    </ContextAPI.Consumer>
+    />
   ))
-}
-
-function withContext(ContextAPIs, mapContextToProps) {
-  return ComposedComponent => {
-    // Recursively consume the APIs only once.
-    return ContextAPIs.reduce(
-      consumeContext,
-      React.forwardRef(({
-        __context_accum__: raw,
-        ...ownProps
-      }, ref) => (
-        <ComposedComponent
-          {...ownProps}
-          {...mapContextToProps(raw, ownProps)}
-          ref={ref}
-        />
-      ))
-    )
-  }
 }
 
 /**

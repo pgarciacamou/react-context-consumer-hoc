@@ -2,10 +2,10 @@ import React, { Component, PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import renderer from 'react-test-renderer'
 import UNSAFE_withContext from '../UNSAFE_withContext'
-import Enzyme, { mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Enzyme, { mount } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
 
-Enzyme.configure({ adapter: new Adapter() });
+Enzyme.configure({ adapter: new Adapter() })
 
 function setup(propOverrides = {}) {
   const ref = React.createRef()
@@ -91,7 +91,7 @@ describe('ContextConsumerHOC', () => {
         spy() // should run once but runs twice
         return (
           <div />
-        );
+        )
       }
     }
     const Consumer = UNSAFE_withContext(
@@ -124,7 +124,7 @@ describe('ContextConsumerHOC', () => {
 
     const wrapper = mount(
       <MyHeavyComponent />
-    );
+    )
 
     wrapper.setState({ random: 1 })
 

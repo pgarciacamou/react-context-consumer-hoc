@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createContextConsumerChain calls the render function prop with the context 1`] = `
+<div
+  a={1}
+/>
+`;
+
+exports[`createContextConsumerChain creates a chain of consumers 1`] = `
+<div
+  a={1}
+  b={1}
+/>
+`;
