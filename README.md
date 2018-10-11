@@ -56,7 +56,7 @@ export default withContext(
       c: a + b
     }
   }
-)
+)(MyComponent)
 ```
 
 ## API
