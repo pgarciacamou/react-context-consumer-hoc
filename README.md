@@ -105,7 +105,7 @@ import { withContextAsProps } from 'react-context-consumer-hoc'
 import { ContextA } from './ProviderA'
 import { ContextB } from './ProviderB'
 
-class SomeComponent extends Component {
+class MyComponent extends Component {
   static propTypes = {
     // from context
     a: PropTypes.number.isRequired,
@@ -126,12 +126,13 @@ class SomeComponent extends Component {
   }
 }
 
-export default withContextAsProps(ContextA, ContextB)(SomeComponent)
+export default withContextAsProps(ContextA, ContextB)(MyComponent)
 
 // App.js
 import React, { Component } from 'react'
 import ProviderA from './ProviderA'
 import ProviderB from './ProviderB'
+import MyComponent from './MyComponent'
 
 export default class App extends Component {
   render () {
@@ -140,7 +141,7 @@ export default class App extends Component {
         <ProviderB>
           <div className='stuff'>some other content</div>
           <div className='nested element'>
-            <Consumer c="3" />
+            <MyComponent c="3" />
           </div>
         </ProviderB>
       </ProviderA>
