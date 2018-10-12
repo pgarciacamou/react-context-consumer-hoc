@@ -26,28 +26,25 @@ npm install --save react-context-consumer-hoc
 ## The Gist
 [back to top](#documentation)
 
+Using withContextAsProps
 ```jsx
 // ContextA == { a: 1 } && ContextB == { b: 1 }
-import { withContextAsProps } from 'react-context-consumer-hoc'
-
 const InnerComponent = ({ a, b, ...ownProps }) => { /* ... */ }
 const MyComponent = withContextAsProps(ContextA, ContextB)(InnerComponent)
 ```
 
+Using withContext
 ```jsx
 // ContextA == { a: 1 } && ContextB == { b: 1 }
-import { withContext } from 'react-context-consumer-hoc'
-
 const InnerComponent = ({ c, ...ownProps }) => { /* ... */ }
 const MyComponent = withContext(
   [ContextA, ContextB],
-  (context) => ({ c: context.a + context.b }) // mapContextToProps
+  (context, ownProps) => ({ c: context.a + context.b }) // mapContextToProps
 )(InnerComponent)
 ```
 
+Using `reselect -> createSelector()`
 ```jsx
-// ContextABC == { a: 1, b: 2, c: 3 }
-import { withContext } from 'react-context-consumer-hoc'
 import { createSelector } from 'reselect'
 
 const addAandB = createSelector(
@@ -56,15 +53,16 @@ const addAandB = createSelector(
   (a, b) => a + b
 )
 
+// ContextABC == { a: 1, b: 2, c: 3 }
 const InnerComponent = ({ sum, ...ownProps }) => { /* ... */ }
 const MyComponent = withContext(
   [ContextABC],
-  (context) => ({ sum: addAandB(context) }) // mapContextToProps
+  (context, ownProps) => ({ sum: addAandB(context) }) // mapContextToProps
 )(InnerComponent)
 ```
 
+Namespaces with `reselect -> contextStructuredSelector()`
 ```jsx
-// ContextA == { a: 1 } && ContextB == { b: 1 }
 import { createStructuredSelector, createSelector } from 'reselect'
 
 const getA = (context) => context.a
@@ -74,11 +72,11 @@ const contextStructuredSelector = createStructuredSelector({
   context: createStructuredSelector({ a: getA, b: getB, sum: getSum })
 })
 
-// This is an example of namespace
+// ContextA == { a: 1 } && ContextB == { b: 1 }
 const InnerComponent = ({ context: { a, b, sum }, ...ownProps }) => { /* ... */ }
 const MyComponent = withContext(
   [ContextA, ContextB],
-  contextStructuredSelector // will receive context and props and reselect handles the heavy lifting
+  contextStructuredSelector // will receive context and ownProps same as mapContextToProps
 )(InnerComponent)
 ```
 
