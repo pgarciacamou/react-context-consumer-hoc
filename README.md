@@ -45,8 +45,6 @@ const MyComponent = withContext(
 
 Using `reselect -> createSelector()`
 ```jsx
-import { createSelector } from 'reselect'
-
 const addAandB = createSelector(
   (context) => context.a,
   (context) => context.b,
@@ -63,8 +61,6 @@ const MyComponent = withContext(
 
 Namespaces with `reselect -> createStructuredSelector()`
 ```jsx
-import { createStructuredSelector } from 'reselect'
-
 const getA = (context) => context.a
 const getB = (context) => context.b
 
