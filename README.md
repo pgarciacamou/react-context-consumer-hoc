@@ -63,20 +63,18 @@ const MyComponent = withContext(
 
 Namespaces with `reselect -> createStructuredSelector()`
 ```jsx
-import { createStructuredSelector, createSelector } from 'reselect'
+import { createStructuredSelector } from 'reselect'
 
 const getA = (context) => context.a
 const getB = (context) => context.b
-const getSum = createSelector(getA, getB, (a, b) => (a + b))
-const contextStructuredSelector = createStructuredSelector({
-  context: createStructuredSelector({ a: getA, b: getB, sum: getSum })
-})
 
 // ContextA == { a: 1 } && ContextB == { b: 1 }
-const InnerComponent = ({ context: { a, b, sum }, ...ownProps }) => { /* ... */ }
+const InnerComponent = ({ context: { a, b }, ...ownProps }) => { /* ... */ }
 const MyComponent = withContext(
   [ContextA, ContextB],
-  contextStructuredSelector // will receive context and ownProps same as mapContextToProps
+  createStructuredSelector({
+    context: createStructuredSelector({ a: getA, b: getB })
+  })
 )(InnerComponent)
 ```
 
