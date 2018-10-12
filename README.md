@@ -12,51 +12,144 @@ npm install --save react-context-consumer-hoc
 
 ## Documentation
 
-- [Simple Example](#simple-example)
+- [The Gist](#the-gist)
+- [Full example](#full-example)
 - [API](#api)
   - [`withContextAsProps(Context1[, Context2, ..., ContextN])`](#withcontextasprops)
   - [`withContext(contextList, mapContextToProps)`](#withcontext)
   - [`UNSAFE_withContext(Context1[, Context2, ..., ContextN])`](#unsafe_withcontext)
-- [Code Samples](#code-samples)
-  - [Simple example using `withContextAsProps`](#simple-example-using-withcontextasprops)
-  - [Simple example using `withContext`](#simple-example-using-withcontext)
-  - [Simple example using `UNSAFE_withContext`](#simple-example-using-unsafe_withcontext)
-  - [Selectors using `reselect`](#selectors-using-reselect)
-    - [Namespacing using `createStructuredSelector`](#namespacing-using-createstructuredselector)
-  - [Redux](#redux)
-    - [Wrap connected component](#wrap-connected-component)
-    - [`noRef`](#noref)
-  - [Full example](#full-example)
+- [Issues with react-redux](#issues-with-react-redux)
+  - [Wrap connected component](#wrap-connected-component)
+  - [`noRef`](#noref)
 - [Contributors](#author)
 
-## Simple example
+## The Gist
 [back to top](#documentation)
 
 ```jsx
-// MyComponent.js
-import { withContext, withContextAsProps } from 'react-context-consumer-hoc'
-import { ContextA } from './MyContextAProvider' // => { a: 1 }
-import { ContextB } from './MyContextBProvider' // => { b: 2 }
+// ContextA == { a: 1 } && ContextB == { b: 1 }
+import { withContextAsProps } from 'react-context-consumer-hoc'
 
-function MyComponent({ a, b, c }) {
-  c = c || a + b;
-  console.log(c === 3); // => true
+const InnerComponent = ({ a, b, ...ownProps }) => { /* ... */ }
+const MyComponent = withContextAsProps(ContextA, ContextB)(InnerComponent)
+```
+
+```jsx
+// ContextA == { a: 1 } && ContextB == { b: 1 }
+import { withContext } from 'react-context-consumer-hoc'
+
+const InnerComponent = ({ c, ...ownProps }) => { /* ... */ }
+const MyComponent = withContext(
+  [ContextA, ContextB],
+  (context) => ({ c: context.a + context.b }) // mapContextToProps
+)(InnerComponent)
+```
+
+```jsx
+// ContextABC == { a: 1, b: 2, c: 3 }
+import { withContext } from 'react-context-consumer-hoc'
+import { createSelector } from 'reselect'
+
+const addAandB = createSelector(
+  (context) => context.a,
+  (context) => context.b,
+  (a, b) => a + b
+)
+
+const InnerComponent = ({ sum, ...ownProps }) => { /* ... */ }
+const MyComponent = withContext(
+  [ContextABC],
+  (context) => ({ sum: addAandB(context) }) // mapContextToProps
+)(InnerComponent)
+```
+
+```jsx
+// ContextA == { a: 1 } && ContextB == { b: 1 }
+import { createStructuredSelector, createSelector } from 'reselect'
+
+const getA = (context) => context.a
+const getB = (context) => context.b
+const getSum = createSelector(getA, getB, (a, b) => (a + b))
+const contextStructuredSelector = createStructuredSelector({
+  context: createStructuredSelector({ a: getA, b: getB, sum: getSum })
+})
+
+// This is an example of namespace
+const InnerComponent = ({ context: { a, b, sum }, ...ownProps }) => { /* ... */ }
+const MyComponent = withContext(
+  [ContextA, ContextB],
+  contextStructuredSelector // will receive context and props and reselect handles the heavy lifting
+)(InnerComponent)
+```
+
+### Full example
+[back to top](#documentation)
+
+```jsx
+// ProviderA.js
+import React from 'react'
+const childContextA = { a: 1 }
+export const ContextA = React.createContext(childContextA)
+export default ({ children }) => (
+  <ContextA.Provider value={childContextA}>
+    {children}
+  </ContextA.Provider>
+)
+
+// ProviderB.js
+import React from 'react'
+const childContextB = { b: 2 }
+export const ContextB = React.createContext(childContextB)
+export default ({ children }) => (
+  <ContextB.Provider value={childContextB}>
+    {children}
+  </ContextB.Provider>
+)
+
+// MyComponent.js
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { withContextAsProps } from 'react-context-consumer-hoc'
+import { ContextA } from './ProviderA'
+import { ContextB } from './ProviderB'
+
+class SomeComponent extends Component {
+  static propTypes = {
+    a: PropTypes.number.isRequired,
+    b: PropTypes.number.isRequired
+  }
+
+  render() {
+    return (
+      <div>
+        <div>{this.props.a}</div>
+        <div>{this.props.b}</div>
+      </div>
+    )
+  }
 }
 
-// passing all as props
-export default withContextAsProps(ContextA, ContextB)(MyComponent)
+export default withContextAsProps(ContextA, ContextB)(SomeComponent)
 
-// OR using mapContextToProps
-export default withContext(
-  [ContextA, ContextB],
-  function mapContextToProps({ a, b }) {
-    // this will only pass prop c and not a and b
-    // pro tip: use reselect to use memoization
-    return {
-      c: a + b
-    }
+// App.js
+import React, { Component } from 'react'
+import ProviderA from './ProviderA'
+import ProviderB from './ProviderB'
+
+export default class App extends Component {
+  render () {
+    return (
+      <ProviderA>
+        <ProviderB>
+          <div className='stuff'>some other content</div>
+          <div className='nested element'>
+            <Consumer />
+          </div>
+        </ProviderB>
+      </ProviderA>
+    )
   }
-)(MyComponent)
+}
 ```
 
 ## API
@@ -109,154 +202,23 @@ Wraps the Component with dynamically created consumers and passes all consumed c
 
   All `react-context-consumer-hoc` APIs wrap the new component once at export, i.e. there is no further computation done afterward.
 
-## Code Samples
+### Issue with react-redux
 [back to top](#documentation)
 
-### Simple example using withContextAsProps
-[back to top](#documentation)
+There is a bug with react-redux and React.forwardRef, see issue [#6](https://github.com/pgarciacamou/react-context-consumer-hoc/issues/6) for more information. 
 
-```jsx
-// MyComponent.js
-import { withContextAsProps } from 'react-context-consumer-hoc'
-import { ContextA } from './MyContextAProvider' // => { a: 1 }
-import { ContextB } from './MyContextBProvider' // => { b: 2 }
+Basically, `react-context-consumer-hoc` uses `React.forwardRef` which returns an object and we currently can't pass an object to `react-redux -> connect()(/* here */)`. Don't worry, `react-redux` is aware of this issue and they are working on it.
 
-function MyComponent({ a, b }) { /* a === 1 && b === 2 //=> true */ }
-
-export default withContextAsProps(ContextA, ContextB)(MyComponent)
-```
-
-### Simple example using withContext
-[back to top](#documentation)
-
-```jsx
-// MyComponent.js
-import { withContext } from 'react-context-consumer-hoc'
-import { ContextA } from './MyContextAProvider' // => { a: 1 }
-import { ContextB } from './MyContextBProvider' // => { b: 2 }
-
-function MyComponent({ c, d }) { /* c === (3 + d) //=> true */ }
-
-export default withContext(
-  [ContextA, ContextB],
-  function mapContextToProps({ a, b }, ownProps) {
-    return {
-      c: a + b + ownProps.d // let's say d is a number
-    }
-  }
-)(MyComponent)
-```
-
-### Simple example using UNSAFE_withContext
-[back to top](#documentation)
-
-```jsx
-// MyComponent.js
-import { UNSAFE_withContext } from 'react-context-consumer-hoc'
-import { ContextA } from './MyContextAProvider' // => { a: 1 }
-import { ContextB } from './MyContextBProvider' // => { b: 2 }
-
-function MyComponent({ context: { a, b } }) { /* a === 1 && b === 2 //=> true */ }
-
-export default UNSAFE_withContext(ContextA, ContextB)(MyComponent)
-```
-
-### Selectors using reselect
-[back to top](#documentation)
-
-Selectors allow increasing rendering performance, for example, if a PureComponent only cares about a never changing property in a context that has multiple changing properties, then the use of a selector prevents unnecessary re-renders.
-
-> Use `reselect` to efficiently compose selectors using memoization
-
-```jsx
-// ContextASelectors.js
-import { createSelector } from 'reselect'
-const getA = (context) => context.a
-const getB = (context) => context.b
-export const getSumOfAandB = createSelector(
-  [getA, getB],
-  (a, b) => a + b
-)
-
-// MyComponent.js
-import { withContext } from 'react-context-consumer-hoc'
-import { ContextA } from './MyContextAProvider' // => { a: 1, b: 2, c: 3 }
-import * as ContextASelectors from './ContextASelectors'
-
-function MyComponent({ a, b, c, sum }) {
-  console.log(a === undefined); // true
-  console.log(b === undefined); // true
-  console.log(c === undefined); // true
-  console.log(sum === 3); // true
-  // ...
-}
-
-export default withContext(
-  [ContextA],
-  function mapContextToProps(context) {
-    return {
-      abSum: ContextSelectors.getSumOfAandB(context)
-    }
-  }
-)(MyComponent)
-```
-
-#### Namespacing using createStructuredSelector
-[back to top](#documentation)
-
-Let's say you want to reconstruct the `UNSAFE_withContext` API to wrap context in an object, e.g. `this.props.context`. Then, we can simply do the following:
-
-```js
-import { createStructuredSelector } from 'reselect'
-import { ContextA } from './MyContextAProvider' // => { a: 1 }
-import { ContextB } from './MyContextBProvider' // => { b: 2 }
-import * as ContextASelectors from '../selectors/ContextASelectors'
-import * as ContextBSelectors from '../selectors/ContextBSelectors'
-// ...
-
-function MyComponent(props) {
-  console.log(props) // { context: { a: 1 , b: 2 } }
-  // ...
-}
-
-export default withContext(
-  [ContextA, ContextB],
-  // react-context-consumer-hoc will pass the context to the
-  // structured selector and reselect will do the heavy lifting
-  createStructuredSelector({
-    context: createStructuredSelector({
-      a: ContextASelectors.getA,
-      b: ContextBSelectors.getB
-    })
-  })
-)(MyComponent)
-```
-
-### Redux
-[back to top](#documentation)
-
-There is a bug with react-redux and React.forwardRef, see issue #6 for more information. But basically, we currently cannot pass an object to `react-redux -> connect()(/* here */)`.
-
-There are 2 workarounds:
+There are 2 workarounds which will most likely break option `withRef` of `react-redux -> connect()`.
 
 #### Wrap connected component
 [back to top](#documentation)
 
-> NOTE: this will still most likely not work with `withRef` option from `react-redux -> connect()`.
-
 ```jsx
-import { withContext } from "react-context-consumer-hoc"
-import { connect } from "react-redux"
-import { ContextA } from './MyContextAProvider' // => { a: 1, b: 2, c: 3 }
-
-function MyComponent() { /* ... */ }
-
 // The same thing can be done using withContextAsProps and UNSAFE_withContext
 export default withContext(
-  [ContextA],
-  function mapContextToProps({ a }) {
-    return { a }
-  }
+  [...],
+  function mapContextToProps(context, ownProps) { /* ... */ }
 )(
   connect(
     function mapStateToProps(state, ownProps) { /* ... */ }
@@ -269,80 +231,16 @@ export default withContext(
 
 `[withContext|withContextAsProps|UNSAFE_withContext].noRef`
 
-`noRef` is a simple wrapper around the components returned by all the APIs to work around the `react-redux -> connect()` bug with React.forwardRef, see issue #6 for more information.
-
-> NOTE: this will still most likely not work with `withRef` option from `react-redux -> connect()`.
+`noRef` is a simple wrapper built on top of all APIs which wraps the topmost consumer with a stateless function component (a function). to work around the `react-redux -> connect()` bug with React.forwardRef, see issue #6 for more information.
 
 ```jsx
-import { withContextAsProps } from "react-context-consumer-hoc"
-import { connect } from "react-redux"
-import { ContextA } from './MyContextAProvider' // => { a: 1, b: 2, c: 3 }
-
-function MyComponent() { /* ... */ }
-
 export default connect(
   function mapStateToProps(state, ownProps) { /* ... */ }
 )(
-  // The same thing can be done using withContext and UNSAFE_withContext
-  withContextAsProps.noRef(ContextA)(MyComponent)
+  withContextAsProps.noRef(...)(MyComponent)
+  // or withContext.noRef([...], mapContextToProps)(MyComponent)
+  // or UNSAFE_withContext.noRef(...)(MyComponent)
 )
-```
-
-### Full example
-[back to top](#documentation)
-
-```jsx
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { withContextAsProps } from 'react-context-consumer-hoc'
-
-class SomeComponent extends Component {
-  static propTypes = {
-    a: PropTypes.number.isRequired, // injected by ContextA
-    b: PropTypes.number.isRequired // injected by ContextB
-  }
-
-  render() {
-    const { a, b } = this.props
-    return [
-      <div key='a' id='context-a'>
-        {a}
-      </div>,
-      <div key='b' id='context-b'>
-        {b}
-      </div>
-    ]
-  }
-}
-
-// The context will normally be exported elsewhere
-const ContextA = React.createContext()
-const ContextB = React.createContext()
-
-// this would normally look like
-//   export default withContextAsProps(ContextA, ContextB)(SomeComponent)
-const Consumer = withContextAsProps(ContextA, ContextB)(SomeComponent)
-
-export default class App extends Component {
-  constructor() {
-    super()
-
-    this.childContextA = { a: 1 }
-    this.childContextB = { b: 2 }
-  }
-  render () {
-    return (
-      <ContextA.Provider value={this.childContextA}>
-        <ContextB.Provider value={this.childContextB}>
-          <div className='stuff'>some other content</div>
-          <div className='nested element'>
-            <Consumer />
-          </div>
-        </ContextB.Provider>
-      </ContextA.Provider>
-    )
-  }
-}
 ```
 
 ## Author
