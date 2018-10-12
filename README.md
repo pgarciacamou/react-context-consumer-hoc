@@ -26,14 +26,14 @@ npm install --save react-context-consumer-hoc
 ## The Gist
 [back to top](#documentation)
 
-Using withContextAsProps
+Using `withContextAsProps`
 ```jsx
 // ContextA == { a: 1 } && ContextB == { b: 1 }
 const InnerComponent = ({ a, b, ...ownProps }) => { /* ... */ }
 const MyComponent = withContextAsProps(ContextA, ContextB)(InnerComponent)
 ```
 
-Using withContext
+Using `withContext`
 ```jsx
 // ContextA == { a: 1 } && ContextB == { b: 1 }
 const InnerComponent = ({ c, ...ownProps }) => { /* ... */ }
@@ -61,7 +61,7 @@ const MyComponent = withContext(
 )(InnerComponent)
 ```
 
-Namespaces with `reselect -> contextStructuredSelector()`
+Namespaces with `reselect -> createStructuredSelector()`
 ```jsx
 import { createStructuredSelector, createSelector } from 'reselect'
 
