@@ -111,8 +111,12 @@ import { ContextB } from './ProviderB'
 
 class SomeComponent extends Component {
   static propTypes = {
+    // from context
     a: PropTypes.number.isRequired,
-    b: PropTypes.number.isRequired
+    b: PropTypes.number.isRequired,
+    
+    // own props
+    c: PropTypes.number.isRequired
   }
 
   render() {
@@ -120,6 +124,7 @@ class SomeComponent extends Component {
       <div>
         <div>{this.props.a}</div>
         <div>{this.props.b}</div>
+        <div>{this.props.c}</div>
       </div>
     )
   }
@@ -139,7 +144,7 @@ export default class App extends Component {
         <ProviderB>
           <div className='stuff'>some other content</div>
           <div className='nested element'>
-            <Consumer />
+            <Consumer c="3" />
           </div>
         </ProviderB>
       </ProviderA>
