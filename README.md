@@ -42,7 +42,7 @@ const MyComponent = withContext(
 )(InnerComponent)
 ```
 
-Using `reselect -> createSelector()`
+Using [`reselect -> createSelector()`](https://github.com/reduxjs/reselect#createselectorinputselectors--inputselectors-resultfunc)
 ```jsx
 const addAandB = createSelector(
   (context) => context.a,
@@ -58,7 +58,7 @@ const MyComponent = withContext(
 )(InnerComponent)
 ```
 
-Namespaces with `reselect -> createStructuredSelector()`
+Namespaces with [`reselect -> createStructuredSelector()`](https://github.com/reduxjs/reselect#createstructuredselectorinputselectors-selectorcreator--createselector)
 ```jsx
 // ContextA == { a: 1 } && ContextB == { b: 1 }
 const InnerComponent = ({ context: { a, b }, ...ownProps }) => { /* ... */ }
