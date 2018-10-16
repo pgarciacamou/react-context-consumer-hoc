@@ -111,7 +111,7 @@ Wraps the Component with dynamically created consumers and passes all consumed c
 
 Wraps the Component with dynamically created consumers and passes all consumed context wrapped in a new object called `context`. This method was kept to keep compatibility with the previous implementation but it is recommended not to use it.
 
-**This method can be refactored to use [namespaces with `reselect`](#namespacing-using-createstructuredselector).**
+**This method can be refactored using [namespaces with `reselect -> createStructuredSelector()`](#the-gist).**
 
 #### Arguments
 
