@@ -12,13 +12,13 @@ npm install --save react-context-consumer-hoc
 
 ## Documentation
 
-- [The Gist](#the-gist)
+- [The Gist (quick examples)](#the-gist)
 - [API](#api)
   - [`withContextAsProps(Context1[, Context2, ..., ContextN])`](#withcontextasprops)
   - [`withContext(contextList, mapContextToProps)`](#withcontext)
   - [`UNSAFE_withContext(Context1[, Context2, ..., ContextN])`](#unsafe_withcontext)
 - [Full example](#full-example)
-- [Issues with react-redux](#issues-with-react-redux)
+- [Issue with react-redux](#issue-with-react-redux)
   - [Wrap connected component](#wrap-connected-component)
   - [`noRef`](#noref)
 - [Contributors](#author)
