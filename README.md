@@ -103,7 +103,6 @@ Wraps the Component with dynamically created consumers and passes all consumed c
   > Use `reselect` to efficiently compose selectors using memoization
 
 ### UNSAFE_withContext
-[back to top](#documentation)
 
 > WARNING: [**deprecated**] Will be removed in v3.
 >   This method passes a new object everytime the top-most component is rendered, causing issues with `PureComponent`s, and anything that implements a shallow comparison (triple equal).
