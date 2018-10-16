@@ -13,18 +13,17 @@ npm install --save react-context-consumer-hoc
 ## Documentation
 
 - [The Gist](#the-gist)
-- [Full example](#full-example)
 - [API](#api)
   - [`withContextAsProps(Context1[, Context2, ..., ContextN])`](#withcontextasprops)
   - [`withContext(contextList, mapContextToProps)`](#withcontext)
   - [`UNSAFE_withContext(Context1[, Context2, ..., ContextN])`](#unsafe_withcontext)
+- [Full example](#full-example)
 - [Issues with react-redux](#issues-with-react-redux)
   - [Wrap connected component](#wrap-connected-component)
   - [`noRef`](#noref)
 - [Contributors](#author)
 
 ## The Gist
-[back to top](#documentation)
 
 Using `withContextAsProps`
 ```jsx
@@ -74,8 +73,54 @@ const MyComponent = withContext(
 )(InnerComponent)
 ```
 
-### Full example
+## API
+
+### withContextAsProps
+
+`withContextAsProps(Context1[, Context2, ..., ContextN])(Component)`
+
+Wraps the Component with dynamically created consumers and passes all consumed context as props. `withContextAsProps` is a facade around `withContext`, providing a convenient API for the most common use cases.
+
+#### Arguments
+
+* `Context1[, Context2, ..., ContextN]` (*Comma-separated context list | required*): At least 1 context API is needed. The component will be wrapped in consumers from each of the context passed to `withContextAsProps`.
+
+  All `react-context-consumer-hoc` APIs wrap the new component once at export, i.e. there is no further computation done afterward.
+
+  > Note: in advanced scenarios where you need more control over the rendering performance, it is recommended to use `withContext`. In this case, you can pass a `mapContextToProps` function where you can specify which props from the context to *select* for a particular component instance. Most apps will not need this as long as the context doesn't change too often. One scenario could be if one of the context gets recomputed on every render but only a few really care about the changes.
+
+### withContext
+
+`withContext(contextList, mapContextToProps)(Component)`
+
+Wraps the Component with dynamically created consumers and passes all consumed context as props.
+
+#### Arguments
+
+* `contextList` (*Array | required*): A list of context API with at least 1. The component will be wrapped in consumers from each of the context in the array.
+* `mapContextToProps(context, ownProps): contextPropsObject` (*Function | required*): This function is called with 2 arguments and must return an object conatining the props that will be passed to the component. The first argument is the consumed context from the APIs and the second argument is the props that are being passed to the component. `mapContextToProps` must return an object Note that this function is called on every render and the object returned will be destructured/passed as props to the component.
+
+  > Use `reselect` to efficiently compose selectors using memoization
+
+### UNSAFE_withContext
 [back to top](#documentation)
+
+> WARNING: [**deprecated**] Will be removed in v3.
+>   This method passes a new object everytime the top-most component is rendered, causing issues with `PureComponent`s, and anything that implements a shallow comparison (triple equal).
+
+`UNSAFE_withContext(Context1[, Context2, ..., ContextN])(Component)`
+
+Wraps the Component with dynamically created consumers and passes all consumed context wrapped in a new object called `context`. This method was kept to keep compatibility with the previous implementation but it is recommended not to use it.
+
+**This method can be refactored to use [namespaces with `reselect`](#namespacing-using-createstructuredselector).**
+
+#### Arguments
+
+* `Context1[, Context2, ..., ContextN]` (*Comma-separated context list | required*): At least 1 context API is needed. The component will be wrapped in consumers from each of the context passed to `withContextAsProps`.
+
+  All `react-context-consumer-hoc` APIs wrap the new component once at export, i.e. there is no further computation done afterward.
+  
+### Full example
 
 ```jsx
 // ProviderA.js
@@ -150,58 +195,7 @@ export default class App extends Component {
 }
 ```
 
-## API
-[back to top](#documentation)
-
-### withContextAsProps
-[back to top](#documentation)
-
-`withContextAsProps(Context1[, Context2, ..., ContextN])(Component)`
-
-Wraps the Component with dynamically created consumers and passes all consumed context as props. `withContextAsProps` is a facade around `withContext`, providing a convenient API for the most common use cases.
-
-#### Arguments
-
-* `Context1[, Context2, ..., ContextN]` (*Comma-separated context list | required*): At least 1 context API is needed. The component will be wrapped in consumers from each of the context passed to `withContextAsProps`.
-
-  All `react-context-consumer-hoc` APIs wrap the new component once at export, i.e. there is no further computation done afterward.
-
-  > Note: in advanced scenarios where you need more control over the rendering performance, it is recommended to use `withContext`. In this case, you can pass a `mapContextToProps` function where you can specify which props from the context to *select* for a particular component instance. Most apps will not need this as long as the context doesn't change too often. One scenario could be if one of the context gets recomputed on every render but only a few really care about the changes.
-
-### withContext
-[back to top](#documentation)
-
-`withContext(contextList, mapContextToProps)(Component)`
-
-Wraps the Component with dynamically created consumers and passes all consumed context as props.
-
-#### Arguments
-
-* `contextList` (*Array | required*): A list of context API with at least 1. The component will be wrapped in consumers from each of the context in the array.
-* `mapContextToProps(context, ownProps): contextPropsObject` (*Function | required*): This function is called with 2 arguments and must return an object conatining the props that will be passed to the component. The first argument is the consumed context from the APIs and the second argument is the props that are being passed to the component. `mapContextToProps` must return an object Note that this function is called on every render and the object returned will be destructured/passed as props to the component.
-
-  > Use `reselect` to efficiently compose selectors using memoization
-
-### UNSAFE_withContext
-[back to top](#documentation)
-
-> WARNING: [**deprecated**] Will be removed in v3.
->   This method passes a new object everytime the top-most component is rendered, causing issues with `PureComponent`s, and anything that implements a shallow comparison (triple equal).
-
-`UNSAFE_withContext(Context1[, Context2, ..., ContextN])(Component)`
-
-Wraps the Component with dynamically created consumers and passes all consumed context wrapped in a new object called `context`. This method was kept to keep compatibility with the previous implementation but it is recommended not to use it.
-
-**This method can be refactored to use [namespaces with `reselect`](#namespacing-using-createstructuredselector).**
-
-#### Arguments
-
-* `Context1[, Context2, ..., ContextN]` (*Comma-separated context list | required*): At least 1 context API is needed. The component will be wrapped in consumers from each of the context passed to `withContextAsProps`.
-
-  All `react-context-consumer-hoc` APIs wrap the new component once at export, i.e. there is no further computation done afterward.
-
 ### Issue with react-redux
-[back to top](#documentation)
 
 There is a bug with react-redux and React.forwardRef, see issue [#6](https://github.com/pgarciacamou/react-context-consumer-hoc/issues/6) for more information. 
 
@@ -210,7 +204,6 @@ Basically, `react-context-consumer-hoc` uses `React.forwardRef` which returns an
 There are 2 workarounds which will most likely break option `withRef` of `react-redux -> connect()`.
 
 #### Wrap connected component
-[back to top](#documentation)
 
 ```jsx
 // The same thing can be done using withContextAsProps and UNSAFE_withContext
@@ -225,7 +218,6 @@ export default withContext(
 ```
 
 #### noRef
-[back to top](#documentation)
 
 `[withContext|withContextAsProps|UNSAFE_withContext].noRef`
 
@@ -242,7 +234,6 @@ export default connect(
 ```
 
 ## Author
-[back to top](#documentation)
 
 * Pablo Garcia [@pgarciacamou](https://twitter.com/pgarciacamou/)
 
