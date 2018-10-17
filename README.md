@@ -17,6 +17,7 @@ npm install --save react-context-consumer-hoc
   - [`withContextAsProps(Context1[, Context2, ..., ContextN])`](#withcontextasprops)
   - [`withContext(contextList, mapContextToProps)`](#withcontext)
   - [`UNSAFE_withContext(Context1[, Context2, ..., ContextN])`](#unsafe_withcontext)
+  - [`createContextConsumerChain(contextList)`](#createcontextconsumerchain)
 - [Full example](#full-example)
 - [Issue with react-redux](#issue-with-react-redux)
   - [Wrap connected component](#wrap-connected-component)
@@ -93,9 +94,9 @@ Wraps the Component with dynamically created consumers and passes all consumed c
 
 #### Arguments
 
-* `Context1[, Context2, ..., ContextN]` (*Comma-separated context list | required*): At least 1 context API is needed. The component will be wrapped in consumers from each of the context passed to `withContextAsProps`.
+* `Context1[, Context2, ..., ContextN]` (*Comma-separated context list | required*): At least 1 context API is needed. The component will be wrapped with the consumers from each of the context passed to `withContextAsProps`.
 
-  All `react-context-consumer-hoc` APIs wrap the new component once at export, i.e. there is no further computation done afterward.
+  All `react-context-consumer-hoc` top-level APIs wrap the new component once at export, i.e. there is no further computation done afterward.
 
   > Note: in advanced scenarios where you need more control over the rendering performance, it is recommended to use `withContext`. In this case, you can pass a `mapContextToProps` function where you can specify which props from the context to *select* for a particular component instance. Most apps will not need this as long as the context doesn't change too often. One scenario could be if one of the context gets recomputed on every render but only a few really care about the changes.
 
@@ -107,7 +108,7 @@ Wraps the Component with dynamically created consumers and passes all consumed c
 
 #### Arguments
 
-* `contextList` (*Array | required*): A list of context API with at least 1. The component will be wrapped in consumers from each of the context in the array.
+* `contextList` (*Array | required*): A list of context APIs with at least 1. The component will be wrapped with the consumers from each of the context in the array.
 * `mapContextToProps(context, ownProps): contextPropsObject` (*Function | required*): This function is called with 2 arguments and must return an object conatining the props that will be passed to the component. The first argument is the consumed context from the APIs and the second argument is the props that are being passed to the component. `mapContextToProps` must return an object Note that this function is called on every render and the object returned will be destructured/passed as props to the component.
 
   > Use `reselect` to efficiently compose selectors using memoization
@@ -125,9 +126,22 @@ Wraps the Component with dynamically created consumers and passes all consumed c
 
 #### Arguments
 
-* `Context1[, Context2, ..., ContextN]` (*Comma-separated context list | required*): At least 1 context API is needed. The component will be wrapped in consumers from each of the context passed to `withContextAsProps`.
+* `Context1[, Context2, ..., ContextN]` (*Comma-separated context list | required*): At least 1 context API is needed. The component will be wrapped with the consumers from each of the context passed to `withContextAsProps`.
 
-  All `react-context-consumer-hoc` APIs wrap the new component once at export, i.e. there is no further computation done afterward.
+  All `react-context-consumer-hoc` top-level APIs wrap the new component once at export, i.e. there is no further computation done afterward.
+
+### createContextConsumerChain
+[back to top](#documentation)
+
+This method is internally used by the library to create a chain of consumers. The consumer chain is used by [`withContext`](#withcontext) to wrap the composed component.
+
+`createContextConsumerChain` returns a component that takes in a render function prop which is passed the consumed context.
+
+#### Arguments
+
+* `contextList` (*Array | required*): A list of context APIs with at least 1. The component will be wrapped with the consumers from each of the context in the array.
+
+  All `react-context-consumer-hoc` top-level APIs wrap the new component once at export, i.e. there is no further computation done afterward.
   
 ### Full example
 

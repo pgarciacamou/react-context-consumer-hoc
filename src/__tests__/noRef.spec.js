@@ -22,7 +22,7 @@ describe('noRef', () => {
         connect()(
           withContext([ContextA], context => context)(MyComponent)
         )
-      }).toThrow('You must pass a component to the function returned by connect. Instead received {}');
+      }).toThrow('You must pass a component to the function returned by connect. Instead received {}')
     })
 
     it('should not forward the reference', () => {
@@ -33,7 +33,7 @@ describe('noRef', () => {
         connect()(
           withContext.noRef([ContextA], context => context)(MyComponent)
         )
-      }).not.toThrow();
+      }).not.toThrow()
     })
   })
 
@@ -46,7 +46,7 @@ describe('noRef', () => {
         connect()(
           withContextAsProps(ContextA)(MyComponent)
         )
-      }).toThrow('You must pass a component to the function returned by connect. Instead received {}');
+      }).toThrow('You must pass a component to the function returned by connect. Instead received {}')
     })
 
     it('should not forward the reference', () => {
@@ -57,7 +57,7 @@ describe('noRef', () => {
         connect()(
           withContextAsProps.noRef(ContextA)(MyComponent)
         )
-      }).not.toThrow();
+      }).not.toThrow()
     })
   })
 
@@ -70,7 +70,7 @@ describe('noRef', () => {
         connect()(
           UNSAFE_withContext(ContextA)(MyComponent)
         )
-      }).toThrow('You must pass a component to the function returned by connect. Instead received {}');
+      }).toThrow('You must pass a component to the function returned by connect. Instead received {}')
     })
 
     it('should not forward the reference', () => {
@@ -81,7 +81,7 @@ describe('noRef', () => {
         connect()(
           UNSAFE_withContext.noRef(ContextA)(MyComponent)
         )
-      }).not.toThrow();
+      }).not.toThrow()
     })
   })
 })
