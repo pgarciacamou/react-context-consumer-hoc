@@ -27,6 +27,8 @@ npm install --save react-context-consumer-hoc
 
 Using `withContextAsProps`
 ```jsx
+import { withContextAsProps } from 'react-context-consumer-hoc'
+
 // ContextA == { a: 1 } && ContextB == { b: 1 }
 const InnerComponent = ({ a, b, ...ownProps }) => { /* ... */ }
 const MyComponent = withContextAsProps(ContextA, ContextB)(InnerComponent)
@@ -34,6 +36,8 @@ const MyComponent = withContextAsProps(ContextA, ContextB)(InnerComponent)
 
 Using `withContext`
 ```jsx
+import { withContext } from 'react-context-consumer-hoc'
+
 // ContextA == { a: 1 } && ContextB == { b: 1 }
 const InnerComponent = ({ c, ...ownProps }) => { /* ... */ }
 const MyComponent = withContext(
@@ -42,8 +46,11 @@ const MyComponent = withContext(
 )(InnerComponent)
 ```
 
-Using [`reselect -> createSelector()`](https://github.com/reduxjs/reselect#createselectorinputselectors--inputselectors-resultfunc)
+Using `withContext` and [`reselect -> createSelector()`](https://github.com/reduxjs/reselect#createselectorinputselectors--inputselectors-resultfunc)
 ```jsx
+import { withContext } from 'react-context-consumer-hoc'
+import { createSelector } from 'reselect'
+
 const addAandB = createSelector(
   (context) => context.a,
   (context) => context.b,
@@ -58,8 +65,11 @@ const MyComponent = withContext(
 )(InnerComponent)
 ```
 
-Namespaces with [`reselect -> createStructuredSelector()`](https://github.com/reduxjs/reselect#createstructuredselectorinputselectors-selectorcreator--createselector)
+Namespaces using `withContext` and [`reselect -> createStructuredSelector()`](https://github.com/reduxjs/reselect#createstructuredselectorinputselectors-selectorcreator--createselector)
 ```jsx
+import { withContext } from 'react-context-consumer-hoc'
+import { createStructuredSelector } from 'reselect'
+
 // ContextA == { a: 1 } && ContextB == { b: 1 }
 const InnerComponent = ({ context: { a, b }, ...ownProps }) => { /* ... */ }
 const MyComponent = withContext(
