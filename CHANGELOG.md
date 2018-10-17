@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Simplify codebase by removing all but one forwardRef
 
+## [v2.1.1](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/v2.1.1) - 2018-10-15
+### Added
+### Fixed
+### Changed
+- Simplify documentation
+
 ## [v2.1.0](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/v2.1.0) - 2018-10-09
 ### Added
 - Introduce `noRef` to all APIs
