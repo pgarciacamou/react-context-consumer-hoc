@@ -353,4 +353,28 @@ describe('ContextConsumerHOC', () => {
     expect(spy).toHaveBeenCalledWith({ context: { d: contextA.b + contextA.c } })
     expect(spy).toHaveBeenCalledTimes(1)
   })
+
+  it('hoists non-react statics', () => {
+    const nonReactStaticValue = 'non-react static value'
+
+    const Context = React.createContext()
+
+    function NakedComponent (props) {
+      return (
+        <div className='component' {...props} />
+      )
+    }
+    NakedComponent.nonReactStaticProperty = nonReactStaticValue
+
+    const App = withContext(
+      [Context],
+      function mapContextToProps({ ctx }) {
+        return {
+          ctx
+        }
+      }
+    )(NakedComponent)
+
+    expect(App.nonReactStaticProperty).toEqual(nonReactStaticValue)
+  })
 })
