@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Changed
 
+## [v2.2.0](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/v2.2.0) - 2019-04-08
+### Added
+- [feature] Add hoist-non-react-statics to `withContext`
+### Fixed
+### Changed
+
 ## [v2.1.1](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/v2.1.1) - 2018-10-15
 ### Added
 ### Fixed
