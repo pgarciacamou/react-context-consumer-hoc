@@ -1,10 +1,11 @@
 import React from 'react'
+import hoistNonReactStatics from 'hoist-non-react-statics'
 
 function consumeContext(InnerConsumer, ContextAPI) {
   // Ignore falsy values to prevent unhandled errors.
   // Only Arrays and React Context are allowed.
   if (!ContextAPI) {
-    return InnerConsumer;
+    return InnerConsumer
   }
 
   return React.forwardRef(({
@@ -29,7 +30,7 @@ function consumeContext(InnerConsumer, ContextAPI) {
 function withContext(ContextAPIs, mapContextToProps) {
   return ComposedComponent => {
     // Recursively consume the APIs only once.
-    return ContextAPIs.reduce(
+    return hoistNonReactStatics(ContextAPIs.reduce(
       consumeContext,
       React.forwardRef(({
         __context_accum__: raw,
@@ -41,7 +42,7 @@ function withContext(ContextAPIs, mapContextToProps) {
           ref={ref}
         />
       ))
-    )
+    ), ComposedComponent)
   }
 }
 
