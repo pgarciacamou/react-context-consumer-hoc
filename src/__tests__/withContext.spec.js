@@ -122,7 +122,7 @@ describe('ContextConsumerHOC', () => {
     const Consumer = withContext(
       [ContextA, ContextB],
       function mapContextToProps(context) {
-        return context;
+        return context
       }
     )(NakedPureComponent)
 
@@ -130,6 +130,7 @@ describe('ContextConsumerHOC', () => {
       constructor(props) {
         super(props)
         this.state = {
+          // eslint-disable-next-line react/prop-types
           childContextB: { b: props.b }
         }
 
@@ -352,5 +353,4 @@ describe('ContextConsumerHOC', () => {
     expect(spy).toHaveBeenCalledWith({ context: { d: contextA.b + contextA.c } })
     expect(spy).toHaveBeenCalledTimes(1)
   })
-
 })

@@ -1,7 +1,6 @@
 import React, { Component, PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import renderer from 'react-test-renderer'
-import { createSelector } from 'reselect'
 import Enzyme, { mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import withContextAsProps from '../withContextAsProps'
@@ -102,6 +101,7 @@ describe('ContextConsumerHOC', () => {
       constructor(props) {
         super(props)
         this.state = {
+          // eslint-disable-next-line react/prop-types
           childContextB: { b: props.b }
         }
 
@@ -141,5 +141,4 @@ describe('ContextConsumerHOC', () => {
     // called 2 times because there is an update in the PureComponent' props
     expect(spy).toHaveBeenCalledTimes(2)
   })
-
 })

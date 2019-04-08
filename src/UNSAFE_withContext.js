@@ -36,6 +36,7 @@ function consumeContext(ChildConsumer, ContextAPI) {
   ))
 }
 
+// eslint-disable-next-line camelcase
 function UNSAFE_withContext(...ContextAPIs) {
   return ComposedComponent => {
     // Recursively consume the APIs only once.
@@ -57,4 +58,5 @@ function noRef(...ContextAPIs) {
 }
 
 UNSAFE_withContext.noRef = noRef
+// eslint-disable-next-line camelcase
 export default UNSAFE_withContext
