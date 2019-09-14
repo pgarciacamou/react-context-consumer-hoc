@@ -257,4 +257,4 @@ Contributors END -->
 <!-- Contributors table END -->
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification.
 
-[![Package Quality](http://npm.packagequality.com/badge/react-context-consumer-hoc.png)](http://packagequality.com/#?package=react-context-consumer-hoc)
+[![Package Quality](http://npm.packagequality.com/badge/react-context-consumer-hoc.png)](http://packagequality.com/#?package=react-context-consumer-hoc) [![Greenkeeper badge](https://badges.greenkeeper.io/pgarciacamou/react-context-consumer-hoc.svg)](https://greenkeeper.io/)
