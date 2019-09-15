@@ -2,7 +2,7 @@
 
 > React context consumer hoc. A 2KB lib that consumes context as props.
 
-[![NPM](https://img.shields.io/npm/v/react-context-consumer-hoc.svg)](https://www.npmjs.com/package/react-context-consumer-hoc) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Build Status](https://travis-ci.org/pgarciacamou/react-context-consumer-hoc.svg?branch=master)](https://travis-ci.org/pgarciacamou/react-context-consumer-hoc) [![Package Quality](http://npm.packagequality.com/shield/react-context-consumer-hoc.svg)](http://packagequality.com/#?package=react-context-consumer-hoc)
+[![NPM](https://img.shields.io/npm/v/react-context-consumer-hoc.svg)](https://www.npmjs.com/package/react-context-consumer-hoc) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Build Status](https://travis-ci.org/pgarciacamou/react-context-consumer-hoc.svg?branch=master)](https://travis-ci.org/pgarciacamou/react-context-consumer-hoc) [![Package Quality](http://npm.packagequality.com/shield/react-context-consumer-hoc.svg)](http://packagequality.com/#?package=react-context-consumer-hoc) [![Greenkeeper badge](https://badges.greenkeeper.io/pgarciacamou/react-context-consumer-hoc.svg)](https://greenkeeper.io/)
 
 ## Install
 
@@ -128,7 +128,7 @@ Wraps the Component with dynamically created consumers and passes all consumed c
 * `Context1[, Context2, ..., ContextN]` (*Comma-separated context list | required*): At least 1 context API is needed. The component will be wrapped in consumers from each of the context passed to `withContextAsProps`.
 
   All `react-context-consumer-hoc` APIs wrap the new component once at export, i.e. there is no further computation done afterward.
-  
+
 ### Full example
 
 ```jsx
@@ -164,7 +164,7 @@ class MyComponent extends Component {
     // from context
     a: PropTypes.number.isRequired,
     b: PropTypes.number.isRequired,
-    
+
     // own props
     c: PropTypes.number.isRequired
   }
@@ -206,7 +206,7 @@ export default class App extends Component {
 
 ### Issue with react-redux
 
-There is a bug with react-redux and React.forwardRef, see issue [#6](https://github.com/pgarciacamou/react-context-consumer-hoc/issues/6) for more information. 
+There is a bug with react-redux and React.forwardRef, see issue [#6](https://github.com/pgarciacamou/react-context-consumer-hoc/issues/6) for more information.
 
 Basically, `react-context-consumer-hoc` uses `React.forwardRef` which returns an object and we currently can't pass an object to `react-redux -> connect()(/* here */)`. Don't worry, `react-redux` is aware of this issue and they are working on it.
 
@@ -257,4 +257,4 @@ Contributors END -->
 <!-- Contributors table END -->
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification.
 
-[![Package Quality](http://npm.packagequality.com/badge/react-context-consumer-hoc.png)](http://packagequality.com/#?package=react-context-consumer-hoc) [![Greenkeeper badge](https://badges.greenkeeper.io/pgarciacamou/react-context-consumer-hoc.svg)](https://greenkeeper.io/)
+[![Package Quality](http://npm.packagequality.com/badge/react-context-consumer-hoc.png)](http://packagequality.com/#?package=react-context-consumer-hoc)
