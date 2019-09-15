@@ -226,6 +226,22 @@ export default withContext(
 )
 ```
 
+#### noRef
+
+`[withContext|withContextAsProps|UNSAFE_withContext].noRef`
+
+`noRef` is a simple wrapper built on top of all APIs which wraps the topmost consumer with a stateless function component (a function). to work around the `react-redux -> connect()` bug with React.forwardRef, see issue #6 for more information.
+
+```jsx
+export default connect(
+  function mapStateToProps(state, ownProps) { /* ... */ }
+)(
+  withContextAsProps.noRef(...)(MyComponent)
+  // or withContext.noRef([...], mapContextToProps)(MyComponent)
+  // or UNSAFE_withContext.noRef(...)(MyComponent)
+)
+```
+
 ## Author
 
 * Pablo Garcia [@pgarciacamou](https://twitter.com/pgarciacamou/)
