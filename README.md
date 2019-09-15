@@ -16,7 +16,6 @@ npm install --save react-context-consumer-hoc
 - [API](#api)
   - [`withContextAsProps(Context1[, Context2, ..., ContextN])`](#withcontextasprops)
   - [`withContext(contextList, mapContextToProps)`](#withcontext)
-  - [`UNSAFE_withContext(Context1[, Context2, ..., ContextN])`](#unsafe_withcontext)
 - [Full example](#full-example)
 - [Issue with react-redux](#issue-with-react-redux)
   - [Wrap connected component](#wrap-connected-component)
@@ -112,23 +111,6 @@ Wraps the Component with dynamically created consumers and passes all consumed c
 
   > Use `reselect` to efficiently compose selectors using memoization
 
-### UNSAFE_withContext
-
-> WARNING: [**deprecated**] Will be removed in v3.
->   This method passes a new object everytime the top-most component is rendered, causing issues with `PureComponent`s, and anything that implements a shallow comparison (triple equal).
-
-`UNSAFE_withContext(Context1[, Context2, ..., ContextN])(Component)`
-
-Wraps the Component with dynamically created consumers and passes all consumed context wrapped in a new object called `context`. This method was kept to keep compatibility with the previous implementation but it is recommended not to use it.
-
-**This method can be refactored using [namespaces with `reselect -> createStructuredSelector()`](#the-gist).**
-
-#### Arguments
-
-* `Context1[, Context2, ..., ContextN]` (*Comma-separated context list | required*): At least 1 context API is needed. The component will be wrapped in consumers from each of the context passed to `withContextAsProps`.
-
-  All `react-context-consumer-hoc` APIs wrap the new component once at export, i.e. there is no further computation done afterward.
-
 ### Full example
 
 ```jsx
@@ -215,7 +197,7 @@ There are 2 workarounds which will most likely break option `withRef` of `react-
 #### Wrap connected component
 
 ```jsx
-// The same thing can be done using withContextAsProps and UNSAFE_withContext
+// The same thing can be done using withContextAsProps
 export default withContext(
   [...],
   function mapContextToProps(context, ownProps) { /* ... */ }

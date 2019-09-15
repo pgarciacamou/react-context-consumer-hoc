@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Changed
 - Removed `noRef` workarounds for `react-redux`. `React-redux` no longer throws an error when passing an object and if we want to forward a reference to the inner component, we can use `forwardRef` option or wrap the connected component. See: https://github.com/reduxjs/react-redux/issues/914#issuecomment-377421145 and https://react-redux.js.org/api/connect#forwardref-boolean.
+- Removed `UNSAFE_withContext` deprecated API.
 
 ## [v2.1.1](https://github.com/pgarciacamou/react-context-consumer-hoc/releases/tag/v2.1.1) - 2018-10-15
 ### Added
