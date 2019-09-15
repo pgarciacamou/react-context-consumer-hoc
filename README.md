@@ -17,9 +17,6 @@ npm install --save react-context-consumer-hoc
   - [`withContextAsProps(Context1[, Context2, ..., ContextN])`](#withcontextasprops)
   - [`withContext(contextList, mapContextToProps)`](#withcontext)
 - [Full example](#full-example)
-- [Issue with react-redux](#issue-with-react-redux)
-  - [Wrap connected component](#wrap-connected-component)
-  - [`noRef`](#noref)
 - [Contributors](#author)
 
 ## The Gist
@@ -184,28 +181,6 @@ export default class App extends Component {
     )
   }
 }
-```
-
-### Issue with react-redux
-
-There is a bug with react-redux and React.forwardRef, see issue [#6](https://github.com/pgarciacamou/react-context-consumer-hoc/issues/6) for more information.
-
-Basically, `react-context-consumer-hoc` uses `React.forwardRef` which returns an object and we currently can't pass an object to `react-redux -> connect()(/* here */)`. Don't worry, `react-redux` is aware of this issue and they are working on it.
-
-There are 2 workarounds which will most likely break option `withRef` of `react-redux -> connect()`.
-
-#### Wrap connected component
-
-```jsx
-// The same thing can be done using withContextAsProps
-export default withContext(
-  [...],
-  function mapContextToProps(context, ownProps) { /* ... */ }
-)(
-  connect(
-    function mapStateToProps(state, ownProps) { /* ... */ }
-  )(MyComponent)
-)
 ```
 
 ## Author
