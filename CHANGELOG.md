@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- Add greenkeeper
+- Upgrade babel dependencies after greenkeeper based on https://github.com/transitive-bullshit/create-react-library/commit/df4d01feb28cba27ec5d0ffee6b107c1680be912#diff-272ba4df44ddd6215793bb638d2d239d
 ### Fixed
 ### Changed
 
