@@ -4,28 +4,28 @@ exports[`ContextConsumerHOC matches snapshot 1`] = `
 Array [
   <div
     className="stuff"
->
+  >
     some other content
-</div>,
+  </div>,
   <div
     className="nested element"
->
+  >
     <div
-        id="context-a"
+      id="context-a"
     >
-        1
+      1
     </div>
     <div
-        id="context-b"
+      id="context-b"
     >
-        2
+      2
     </div>
     <div
-        id="props-c"
+      id="props-c"
     >
-        3
+      3
     </div>
-</div>,
+  </div>,
 ]
 `;
 
