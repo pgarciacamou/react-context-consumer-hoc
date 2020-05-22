@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Add greenkeeper
 - Upgrade babel dependencies after greenkeeper based on https://github.com/transitive-bullshit/create-react-library/commit/df4d01feb28cba27ec5d0ffee6b107c1680be912#diff-272ba4df44ddd6215793bb638d2d239d
+- Remove greenkeeper in favor of renovate
 ### Fixed
 ### Changed
 - Removed `noRef` workarounds for `react-redux`. `React-redux` no longer throws an error when passing an object and if we want to forward a reference to the inner component, we can use `forwardRef` option or wrap the connected component. See: https://github.com/reduxjs/react-redux/issues/914#issuecomment-377421145 and https://react-redux.js.org/api/connect#forwardref-boolean.
