@@ -1,0 +1,22 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "prCreation": "immediate",
+  "prHourlyLimit": 2,
+  "prConcurrentLimit": 5,
+  "rangeStrategy": "pin",
+  "packageRules": [
+    {
+      "updateTypes": [ "minor", "patch" ],
+      "automerge": false
+    }
+  ],
+  "masterIssue": true,
+  "major": {
+    "masterIssueApproval": true
+  },
+  "labels": [
+    "renovate"
+  ]
+}
