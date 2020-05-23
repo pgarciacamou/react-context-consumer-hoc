@@ -8,7 +8,8 @@
   "packageRules": [
     {
       "packagePatterns": [
-        "*"
+        "dependencies",
+        "devDependencies"
       ],
       "rangeStrategy": "pin",
       "updateTypes": [ "minor", "patch" ],
@@ -19,7 +20,7 @@
         "engines",
         "peerDependencies"
       ],
-      "rangeStrategy": "auto"
+      "rangeStrategy": "widen"
     }
   ],
   "masterIssue": true,
