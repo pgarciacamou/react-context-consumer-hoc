@@ -3,7 +3,6 @@
     "config:base"
   ],
   "prCreation": "immediate",
-  "prHourlyLimit": 2,
   "prConcurrentLimit": 5,
   "packageRules": [
     {
