@@ -5,11 +5,21 @@
   "prCreation": "immediate",
   "prHourlyLimit": 2,
   "prConcurrentLimit": 5,
-  "rangeStrategy": "pin",
   "packageRules": [
     {
+      "packagePatterns": [
+        "*"
+      ],
+      "rangeStrategy": "pin",
       "updateTypes": [ "minor", "patch" ],
       "automerge": false
+    },
+    {
+      "depTypeList": [
+        "engines",
+        "peerDependencies"
+      ],
+      "rangeStrategy": "auto"
     }
   ],
   "masterIssue": true,
