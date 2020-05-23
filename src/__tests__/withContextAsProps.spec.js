@@ -1,7 +1,6 @@
 import React, { Component, PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import renderer from 'react-test-renderer'
-import { createSelector } from 'reselect'
 import Enzyme, { mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import withContextAsProps from '../withContextAsProps'
@@ -26,13 +25,13 @@ function setup(propOverrides = {}) {
     render() {
       const { a, b, c } = this.props
       return [
-        <div key='a' id='context-a'>
+        <div key="a" id="context-a">
           {a}
         </div>,
-        <div key='b' id='context-b'>
+        <div key="b" id="context-b">
           {b}
         </div>,
-        <div key='c' id='props-c'>
+        <div key="c" id="props-c">
           {c}
         </div>
       ]
@@ -50,8 +49,8 @@ function setup(propOverrides = {}) {
   const tree = renderer.create(
     <ContextA.Provider value={{ a: 1 }}>
       <ContextB.Provider value={{ b: 2 }}>
-        <div className='stuff'>some other content</div>
-        <div className='nested element'>
+        <div className="stuff">some other content</div>
+        <div className="nested element">
           <Consumer {...props} />
         </div>
       </ContextB.Provider>
@@ -88,17 +87,16 @@ describe('ContextConsumerHOC', () => {
     class NakedPureComponent extends PureComponent {
       render() {
         spy() // should run once
-        return (
-          <div />
-        )
+        return <div />
       }
     }
-    const Consumer = withContextAsProps(
-      ContextA,
-      ContextB
-    )(NakedPureComponent)
+    const Consumer = withContextAsProps(ContextA, ContextB)(NakedPureComponent)
 
     class App extends Component {
+      static propTypes = {
+        b: PropTypes.number
+      }
+
       constructor(props) {
         super(props)
         this.state = {
@@ -113,8 +111,8 @@ describe('ContextConsumerHOC', () => {
         return (
           <ContextA.Provider value={this.childContextA}>
             <ContextB.Provider value={this.state.childContextB}>
-              <div className='stuff'>some other content</div>
-              <div className='nested element'>
+              <div className="stuff">some other content</div>
+              <div className="nested element">
                 <Consumer />
               </div>
             </ContextB.Provider>
@@ -123,9 +121,7 @@ describe('ContextConsumerHOC', () => {
       }
     }
 
-    const wrapper = mount(
-      <App b={2} />
-    )
+    const wrapper = mount(<App b={2} />)
 
     wrapper.setState({ random: 1 })
 
@@ -141,5 +137,4 @@ describe('ContextConsumerHOC', () => {
     // called 2 times because there is an update in the PureComponent' props
     expect(spy).toHaveBeenCalledTimes(2)
   })
-
 })

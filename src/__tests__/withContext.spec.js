@@ -26,13 +26,13 @@ function setup(propOverrides = {}) {
     render() {
       const { a, b, c } = this.props
       return [
-        <div key='a' id='context-a'>
+        <div key="a" id="context-a">
           {a}
         </div>,
-        <div key='b' id='context-b'>
+        <div key="b" id="context-b">
           {b}
         </div>,
-        <div key='c' id='props-c'>
+        <div key="c" id="props-c">
           {c}
         </div>
       ]
@@ -45,18 +45,17 @@ function setup(propOverrides = {}) {
 
   // this would normally look like
   //   export default withContext(...)(SomeComponent)
-  const Consumer = withContext(
-    [ContextA, ContextB],
-    function mapContextToProps(context) {
-      return context
-    }
-  )(SomeComponent)
+  const Consumer = withContext([ContextA, ContextB], function mapContextToProps(
+    context
+  ) {
+    return context
+  })(SomeComponent)
 
   const tree = renderer.create(
     <ContextA.Provider value={{ a: 1 }}>
       <ContextB.Provider value={{ b: 2 }}>
-        <div className='stuff'>some other content</div>
-        <div className='nested element'>
+        <div className="stuff">some other content</div>
+        <div className="nested element">
           <Consumer {...props} />
         </div>
       </ContextB.Provider>
@@ -89,13 +88,10 @@ describe('ContextConsumerHOC', () => {
     const props = { b: 2 }
     const childContextA = { a: 1 }
     const ContextA = React.createContext(childContextA)
-    const Consumer = withContext(
-      [ContextA],
-      (context, ownProps) => {
-        expect(ownProps).toEqual(props)
-        return {}
-      }
-    )((props) => (<div {...props} />))
+    const Consumer = withContext([ContextA], (context, ownProps) => {
+      expect(ownProps).toEqual(props)
+      return {}
+    })((props) => <div {...props} />)
 
     const tree = renderer.create(
       <ContextA.Provider value={childContextA}>
@@ -114,19 +110,21 @@ describe('ContextConsumerHOC', () => {
     class NakedPureComponent extends PureComponent {
       render() {
         spy() // should run once
-        return (
-          <div />
-        )
+        return <div />
       }
     }
     const Consumer = withContext(
       [ContextA, ContextB],
       function mapContextToProps(context) {
-        return context;
+        return context
       }
     )(NakedPureComponent)
 
     class App extends Component {
+      static propTypes = {
+        b: PropTypes.number
+      }
+
       constructor(props) {
         super(props)
         this.state = {
@@ -141,8 +139,8 @@ describe('ContextConsumerHOC', () => {
         return (
           <ContextA.Provider value={this.childContextA}>
             <ContextB.Provider value={this.state.childContextB}>
-              <div className='stuff'>some other content</div>
-              <div className='nested element'>
+              <div className="stuff">some other content</div>
+              <div className="nested element">
                 <Consumer />
               </div>
             </ContextB.Provider>
@@ -151,9 +149,7 @@ describe('ContextConsumerHOC', () => {
       }
     }
 
-    const wrapper = mount(
-      <App b={2} />
-    )
+    const wrapper = mount(<App b={2} />)
 
     wrapper.setState({ random: 1 })
 
@@ -177,21 +173,19 @@ describe('ContextConsumerHOC', () => {
     const ContextA = React.createContext()
     const ContextB = React.createContext()
 
-    function NakedComponent (props) {
-      return (
-        <div className='component' {...props} />
-      )
+    function NakedComponent(props) {
+      return <div className="component" {...props} />
     }
 
-    const App = withContext(
-      [ContextA, ContextB],
-      function mapContextToProps({ a, b }) {
-        return {
-          awrap: { a }, // WARNING: this creates a new object, use some type of memoization
-          b
-        }
+    const App = withContext([ContextA, ContextB], function mapContextToProps({
+      a,
+      b
+    }) {
+      return {
+        awrap: { a }, // WARNING: this creates a new object, use some type of memoization
+        b
       }
-    )(NakedComponent)
+    })(NakedComponent)
 
     const wrapper = mount(
       <ContextA.Provider value={contextA}>
@@ -219,19 +213,14 @@ describe('ContextConsumerHOC', () => {
 
     const NakedComponent = (props) => {
       spy(props)
-      return (
-        <div className='component' {...props} />
-      )
+      return <div className="component" {...props} />
     }
 
-    const App = withContext(
-      [ContextA],
-      function mapContextToProps(context) {
-        return {
-          a: getA(context)
-        }
+    const App = withContext([ContextA], function mapContextToProps(context) {
+      return {
+        a: getA(context)
       }
-    )(NakedComponent)
+    })(NakedComponent)
 
     const wrapper = mount(
       <ContextA.Provider value={contextA}>
@@ -264,29 +253,22 @@ describe('ContextConsumerHOC', () => {
     class NakedComponent extends PureComponent {
       render() {
         spy(this.props)
-        return (
-          <div className='component' {...this.props} />
-        )
+        return <div className="component" {...this.props} />
       }
     }
 
-    const App = withContext(
-      [ContextA],
-      function mapContextToProps(context) {
-        return {
-          d: getD(context)
-        }
+    const App = withContext([ContextA], function mapContextToProps(context) {
+      return {
+        d: getD(context)
       }
-    )(NakedComponent)
+    })(NakedComponent)
 
     const Root = (props) => (
       <ContextA.Provider value={{ ...contextA, ...props }}>
         <App />
       </ContextA.Provider>
     )
-    const wrapper = mount(
-      <Root c={3} />
-    )
+    const wrapper = mount(<Root c={3} />)
 
     wrapper.setProps({ a: 2 })
 
@@ -317,9 +299,7 @@ describe('ContextConsumerHOC', () => {
     class NakedComponent extends PureComponent {
       render() {
         spy(this.props)
-        return (
-          <div className='component' {...this.props} />
-        )
+        return <div className="component" {...this.props} />
       }
     }
 
@@ -337,9 +317,7 @@ describe('ContextConsumerHOC', () => {
         <App />
       </ContextA.Provider>
     )
-    const wrapper = mount(
-      <Root c={3} />
-    )
+    const wrapper = mount(<Root c={3} />)
 
     wrapper.setProps({ a: 2 })
 
@@ -349,8 +327,9 @@ describe('ContextConsumerHOC', () => {
     expect(component.prop('context').b).toBeUndefined()
     expect(component.prop('context').c).toBeUndefined()
     expect(component.prop('context').d).toEqual(contextA.b + contextA.c)
-    expect(spy).toHaveBeenCalledWith({ context: { d: contextA.b + contextA.c } })
+    expect(spy).toHaveBeenCalledWith({
+      context: { d: contextA.b + contextA.c }
+    })
     expect(spy).toHaveBeenCalledTimes(1)
   })
-
 })
