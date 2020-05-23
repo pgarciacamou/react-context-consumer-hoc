@@ -1,7 +1,4 @@
-import withContext from './withContext';
-import withContextAsProps from './withContextAsProps';
+import withContext from './withContext'
+import withContextAsProps from './withContextAsProps'
 
-export {
-  withContext,
-  withContextAsProps,
-}
+export { withContext, withContextAsProps }
